@@ -1,6 +1,5 @@
 import '../services/utils.dart';
 
-// Model for UserSerializer
 class Profile {
   final String username;
   final String profileBio;
@@ -12,17 +11,16 @@ class Profile {
   final String artist2;
   final String artist3;
 
-  Profile({
-    this.username,
-    this.profileBio,
-    this.profileImage,
-    this.anthem1,
-    this.anthem2,
-    this.anthem3,
-    this.artist1,
-    this.artist2,
-    this.artist3
-  });
+  Profile(
+      {this.username,
+      this.profileBio,
+      this.profileImage,
+      this.anthem1,
+      this.anthem2,
+      this.anthem3,
+      this.artist1,
+      this.artist2,
+      this.artist3});
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(

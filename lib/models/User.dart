@@ -1,6 +1,5 @@
 import '../services/utils.dart';
 
-// User class represents UserBasicSerializer
 class User {
   final String username;
   final String profileBio;

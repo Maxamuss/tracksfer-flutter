@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:intl/intl.dart';
+import 'package:tracksfer/screens/groups/group_detail.dart';
+
 import '../../models/Group.dart';
 import '../../services/auth.dart';
 import '../../services/requests.dart';
@@ -19,41 +23,31 @@ class GroupListWidget extends StatefulWidget {
 }
 
 class _GroupListWidgetState extends State<GroupListWidget> {
-  List<Group> _groups;
-  List<Group> _pendingGroups;
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+  Future<Map<String, dynamic>> _groups;
   bool _loading = true;
   bool _error = false;
 
-  void _getGroups() async {
-    final responses = await Future.wait([
-      Request.get('groups/'),
-      Request.get('groups/?pending=true'),
-    ]);
-    final groupResponse = responses[0];
-    final pendingGroupResponse = responses[1];
-    if (groupResponse.statusCode == 200 &&
-        pendingGroupResponse.statusCode == 200) {
-      final groupsJson = groupResponse.data['results'];
-      final pendingGroupsJson = pendingGroupResponse.data['results'];
-      _groups = groupsJson.map((model) => Group.fromJson(model)).toList();
-      _pendingGroups =
-          pendingGroupsJson.map((model) => Group.fromJson(model)).toList();
-
-      setState(() {
-        _loading = false;
-      });
-    } else if (groupResponse.statusCode == 403 ||
-        pendingGroupResponse.statusCode == 403) {
-      logout(context);
-    } else {
+  Future<Map<String, dynamic>> _getGroups() async {
+    try {
+      final response = await Request.get('groups/');
+      if (response.statusCode == 200) {
+        return response.data;
+      } else if (response.statusCode == 403) {
+        logout(context);
+      } else {
+        _setError();
+      }
+    } catch (e) {
       _setError();
     }
   }
 
   void _refresh() {
     setState(() {
-      _loading = true;
       _error = false;
+      _groups = _getGroups();
     });
   }
 
@@ -74,25 +68,70 @@ class _GroupListWidgetState extends State<GroupListWidget> {
   @override
   void initState() {
     super.initState();
-    _getGroups();
+    _refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_error) {
-      LoadErrorWidget(
-        errorMessage: 'Failed to load your groups.',
-        function: _refresh,
-      );
-    }
+    final errorWidget = LoadErrorWidget(
+      errorMessage: 'Failed to load your groups.',
+      function: _refresh,
+    );
 
-    if (_loading) {
-      return LoadingWidget();
+    if (_error) {
+      return errorWidget;
     } else {
-      return Container(
-        child: Center(
-          child: Text('groups'),
-        ),
+      return FutureBuilder<Map<String, dynamic>>(
+        future: _groups,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            Iterable groupsJson = snapshot.data['results'];
+            List<Group> groups =
+                groupsJson.map((model) => Group.fromJson(model)).toList();
+
+            if (groups.isEmpty) {
+              return Center(
+                child: Text('You are not in any groups yet'),
+              );
+            }
+
+            return SmartRefresher(
+              enablePullDown: true,
+              // enablePullUp: false,
+              header: ClassicHeader(),
+              controller: _refreshController,
+              onRefresh: _refresh,
+              child: ListView.builder(
+                itemCount: groups.length,
+                itemBuilder: (context, index) {
+                  Group group = groups[index];
+                  return ListTile(
+                    title: Text(group.groupName),
+                    subtitle: Text(group.groupDesc),
+                    trailing: Text(
+                      DateFormat('H:m EEEE d LLLL')
+                          .format(group.updatedAt)
+                          .toString(),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GroupDetailScreen(group),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return errorWidget;
+          }
+          return Center(
+            child: LoadingWidget(),
+          );
+        },
       );
     }
   }

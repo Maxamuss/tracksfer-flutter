@@ -1,6 +1,5 @@
 import '../services/utils.dart';
 
-// Model for GroupSerializer
 class Group {
   final String id;
   final String groupName;
@@ -9,14 +8,13 @@ class Group {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  Group({
-    this.id,
-    this.groupName,
-    this.groupDesc,
-    this.isPrivate,
-    this.createdAt,
-    this.updatedAt
-  });
+  Group(
+      {this.id,
+      this.groupName,
+      this.groupDesc,
+      this.isPrivate,
+      this.createdAt,
+      this.updatedAt});
 
   factory Group.fromJson(Map<String, dynamic> json) {
     return Group(
@@ -24,8 +22,8 @@ class Group {
       groupName: decodeString(json['group_name']),
       groupDesc: decodeString(json['group_desc']),
       isPrivate: json['is_private'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at']
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
     );
   }
 }

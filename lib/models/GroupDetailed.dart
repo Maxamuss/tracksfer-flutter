@@ -1,7 +1,6 @@
-import '../services/utils.dart';
 import 'User.dart';
+import '../services/utils.dart';
 
-// Model for GroupDetailedSerializer
 class GroupDetailed {
   final String id;
   final String groupName;
