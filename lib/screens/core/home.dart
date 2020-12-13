@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracksfer/screens/groups/group_list.dart';
+import 'package:tracksfer/screens/groups/group_search.dart';
 import 'package:tracksfer/screens/profile/profile.dart';
 import '../feed/feed.dart';
 
@@ -38,6 +39,30 @@ class _HomeWidgetState extends State<HomeWidget> {
     });
   }
 
+  List<Widget> _getActions() {
+    List<Widget> actions;
+
+    if (_currentIndex == 0) {
+      actions = [];
+    } else if (_currentIndex == 1) {
+      actions = [
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            showSearch(
+              context: context,
+              delegate: GroupSearchDelegate(),
+            );
+          },
+        ),
+      ];
+    } else {
+      actions = [];
+    }
+
+    return actions;
+  }
+
   @override
   void initState() {
     _appBarTitle = _titles[_currentIndex];
@@ -50,6 +75,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(_appBarTitle),
+        actions: _getActions(),
       ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
