@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:spotify/spotify.dart' as Spotify hide User;
 import 'package:tracksfer/services/spotify.dart';
@@ -117,13 +119,47 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
                   itemCount: _tracks.length,
                   itemBuilder: (context, index) {
                     final Track track = _tracks[index];
-                    final String artists = track.spotifyTrack.artists[0].name;
                     return ListTile(
+                      leading: CachedNetworkImage(
+                        imageUrl: track.getAlbumThumbnail(),
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                       title: Text(track.spotifyTrack.name),
-                      subtitle: Text(artists),
+                      subtitle: Text(track.getArtistNames()),
+                      onTap: () {
+                        showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => TrackModelWidget(track),
+                        );
+                      },
                     );
                   },
                 ),
+    );
+  }
+}
+
+class TrackModelWidget extends StatefulWidget {
+  final Track track;
+
+  TrackModelWidget(this.track);
+
+  @override
+  _TrackModelWidgetState createState() => _TrackModelWidgetState();
+}
+
+class _TrackModelWidgetState extends State<TrackModelWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Text(widget.track.spotifyTrack.name),
+          Text(widget.track.getArtistNames()),
+        ],
+      ),
     );
   }
 }

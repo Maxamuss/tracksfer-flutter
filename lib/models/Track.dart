@@ -28,4 +28,26 @@ class Track {
       createdAt: DateTime.parse(json['created_at']),
     );
   }
+
+  String getArtistNames() {
+    List<String> artistNames = [];
+
+    if (spotifyTrack != null) {
+      spotifyTrack.artists.forEach((x) => artistNames.add(x.name));
+    }
+
+    return artistNames.join(', ');
+  }
+
+  String getAlbumThumbnail() {
+    String url = '';
+
+    if (spotifyTrack != null) {
+      final images = spotifyTrack.album.images;
+      // url = images[images.length - 1].url;
+      url = images[0].url;
+    }
+
+    return url;
+  }
 }
