@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tracksfer/screens/groups/group_list.dart';
-import 'package:tracksfer/screens/groups/group_search.dart';
-import 'package:tracksfer/screens/profile/profile.dart';
+
 import '../feed/feed.dart';
+import '../groups/group_create.dart';
+import '../groups/group_list.dart';
+import '../groups/group_search.dart';
+import '../profile/profile.dart';
+import '../profile/settings.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -18,16 +21,16 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> {
   // FirebaseMessaging _fcm = FirebaseMessaging();
-  int _currentIndex = 0;
+  int _currentIndex = 1;
   String _appBarTitle;
   final List<String> _titles = [
-    'Feed',
     'Groups',
+    'Feed',
     'Profile',
   ];
   final List<Widget> _children = [
-    FeedScreen(),
     GroupListScreen(),
+    FeedScreen(),
     ProfileScreen(),
   ];
 
@@ -37,30 +40,6 @@ class _HomeWidgetState extends State<HomeWidget> {
       this._currentIndex = index;
       this._appBarTitle = title;
     });
-  }
-
-  List<Widget> _getActions() {
-    List<Widget> actions;
-
-    if (_currentIndex == 0) {
-      actions = [];
-    } else if (_currentIndex == 1) {
-      actions = [
-        IconButton(
-          icon: Icon(Icons.search),
-          onPressed: () {
-            showSearch(
-              context: context,
-              delegate: GroupSearchDelegate(),
-            );
-          },
-        ),
-      ];
-    } else {
-      actions = [];
-    }
-
-    return actions;
   }
 
   @override
@@ -75,21 +54,23 @@ class _HomeWidgetState extends State<HomeWidget> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(_appBarTitle),
+        leading: _getLeading(),
         actions: _getActions(),
       ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        // backgroundColor: Color(0xff2E343B),
         showSelectedLabels: false,
         showUnselectedLabels: false,
         onTap: _onTabTapped,
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.rss_feed),
+            icon: Icon(Icons.group),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.group),
+            icon: Icon(Icons.rss_feed),
             label: '',
           ),
           BottomNavigationBarItem(
@@ -99,5 +80,65 @@ class _HomeWidgetState extends State<HomeWidget> {
         ],
       ),
     );
+  }
+
+  Widget _getLeading() {
+    Widget leading;
+
+    if (_currentIndex == 0) {
+      leading = IconButton(
+        icon: Icon(Icons.search),
+        onPressed: () {
+          showSearch(
+            context: context,
+            delegate: GroupSearchDelegate(),
+          );
+        },
+      );
+    } else if (_currentIndex == 1) {
+      leading = null;
+    } else {
+      leading = null;
+    }
+
+    return leading;
+  }
+
+  List<Widget> _getActions() {
+    List<Widget> actions;
+
+    if (_currentIndex == 0) {
+      actions = [
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GroupCreateScreen(),
+              ),
+            );
+          },
+        ),
+      ];
+    } else if (_currentIndex == 1) {
+      actions = [];
+    } else {
+      actions = [
+        IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SettingsScreen(),
+              ),
+            );
+          },
+        ),
+      ];
+    }
+
+    return actions;
   }
 }
