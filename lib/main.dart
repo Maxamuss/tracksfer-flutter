@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tracksfer/screens/setup/set_display_name.dart';
 
 import 'screens/core/home.dart';
 import 'screens/core/login.dart';
@@ -38,9 +39,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (_) => LoginScreen(),
         '/home': (_) => HomeScreen(),
-        '/feed': (_) => FeedScreen(),
-        '/groups': (_) => GroupListScreen(),
-        '/profile': (_) => ProfileScreen(),
       },
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
+import '../../screens/setup/set_display_name.dart';
 import '../../services/auth.dart';
 import '../../services/requests.dart';
 
@@ -33,20 +34,33 @@ class _LoginWidgetState extends State<LoginWidget> {
 
       final authToken = Uri.parse(responseUri).queryParameters['authToken'];
       final accessToken = Uri.parse(responseUri).queryParameters['accessToken'];
+      final newUser =
+          Uri.parse(responseUri).queryParameters['newUser'].toLowerCase() ==
+              'true';
+      final displayName = Uri.parse(responseUri).queryParameters['displayName'];
       print(authToken);
       print(accessToken);
+      print(newUser);
+      print(displayName);
 
       setAuthToken(authToken);
       setSpotifyAccessToken(accessToken);
-      _sendToFeed();
+      _sendToNextScreen(newUser, displayName);
     } catch (e) {
       print(e.toString());
     }
   }
 
-  void _sendToFeed() {
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+  void _sendToNextScreen(newUser, displayName) {
+    if (newUser) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => SetDisplayNameScreen(displayName)),
+          (Route<dynamic> route) => false);
+    } else {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    }
   }
 
   @override
@@ -54,7 +68,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     getAuthToken().then((token) {
       if (token != null) {
         SchedulerBinding.instance.addPostFrameCallback((_) {
-          _sendToFeed();
+          _sendToNextScreen(false, '');
         });
       }
       super.initState();
