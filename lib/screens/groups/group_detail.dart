@@ -47,16 +47,18 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
         final Iterable tracksJson = response.data['results'];
         final List<Track> tracks =
             tracksJson.map((model) => Track.fromJson(model)).toList();
-        final tracksMap =
-            Map.fromIterable(tracks, key: (e) => e.spotifyId, value: (e) => e);
-        List<String> tracksIds = [];
-        tracks.forEach((track) => tracksIds.add(track.spotifyId));
-        final spotify = spotifyInit();
-        final Iterable<Spotify.Track> spotifyTracks =
-            await spotify.tracks.list(tracksIds);
-        spotifyTracks.forEach((track) {
-          tracksMap[track.id].spotifyTrack = track;
-        });
+        if (tracks.isNotEmpty) {
+          final tracksMap = Map.fromIterable(tracks,
+              key: (e) => e.spotifyId, value: (e) => e);
+          List<String> tracksIds = [];
+          tracks.forEach((track) => tracksIds.add(track.spotifyId));
+          final spotify = spotifyInit();
+          final Iterable<Spotify.Track> spotifyTracks =
+              await spotify.tracks.list(tracksIds);
+          spotifyTracks.forEach((track) {
+            tracksMap[track.id].spotifyTrack = track;
+          });
+        }
         setState(() {
           _tracks = tracks;
           _loading = false;
@@ -115,28 +117,36 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
           ? errorWidget
           : _loading
               ? LoadingWidget()
-              : ListView.builder(
-                  itemCount: _tracks.length,
-                  itemBuilder: (context, index) {
-                    final Track track = _tracks[index];
-                    return ListTile(
-                      leading: CachedNetworkImage(
-                        imageUrl: track.getAlbumThumbnail(),
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
+              : _tracks.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No tracks have been added to this group yet! Why not add one now?',
+                        textAlign: TextAlign.center,
                       ),
-                      title: Text(track.spotifyTrack.name),
-                      subtitle: Text(track.getArtistNames()),
-                      onTap: () {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          builder: (context) => TrackModelWidget(track),
+                    )
+                  : ListView.builder(
+                      itemCount: _tracks.length,
+                      itemBuilder: (context, index) {
+                        final Track track = _tracks[index];
+                        return ListTile(
+                          leading: CachedNetworkImage(
+                            imageUrl: track.getAlbumThumbnail(),
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
+                          title: Text(track.spotifyTrack.name),
+                          subtitle: Text(track.getArtistNames()),
+                          onTap: () {
+                            showCupertinoModalBottomSheet(
+                              context: context,
+                              builder: (context) => TrackModelWidget(track),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                ),
+                    ),
     );
   }
 }
