@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:tracksfer/models/Group.dart';
 import 'package:tracksfer/services/auth.dart';
 import 'package:tracksfer/services/requests.dart';
@@ -30,13 +32,13 @@ class GroupSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    if (query.length < 3) {
+    if (query.length < 1) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Center(
             child: Text(
-              "Search term must be longer than two letters.",
+              'Please enter a search term to find a group.',
             ),
           )
         ],
@@ -135,6 +137,56 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
           child: LoadingWidget(),
         );
       },
+    );
+  }
+}
+
+class GroupJoinWidget extends StatefulWidget {
+  final Group group;
+
+  GroupJoinWidget(this.group);
+
+  @override
+  _GroupJoinWidgetState createState() => _GroupJoinWidgetState();
+}
+
+class _GroupJoinWidgetState extends State<GroupJoinWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoScaffold(
+      body: Builder(
+        builder: (context) => CupertinoPageScaffold(
+          backgroundColor: Colors.white,
+          navigationBar: CupertinoNavigationBar(
+            transitionBetweenRoutes: false,
+            middle: Text('Normal Navigation Presentation'),
+            trailing: GestureDetector(
+                child: Icon(Icons.arrow_upward),
+                onTap: () => CupertinoScaffold.showCupertinoModalBottomSheet(
+                      expand: true,
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Stack(
+                        children: <Widget>[
+                          // ModalWithScroll(),
+                          Positioned(
+                            height: 40,
+                            left: 40,
+                            right: 40,
+                            bottom: 20,
+                            child: MaterialButton(
+                              onPressed: () => Navigator.of(context).popUntil(
+                                  (route) => route.settings.name == '/'),
+                              child: Text('Pop back home'),
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+          ),
+          child: Center(child: Container()),
+        ),
+      ),
     );
   }
 }
