@@ -33,6 +33,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
     try {
       final response = await Request.get('groups/');
       if (response.statusCode == 200) {
+        _refreshController.refreshCompleted();
         return response.data;
       } else if (response.statusCode == 403) {
         logout(context);
