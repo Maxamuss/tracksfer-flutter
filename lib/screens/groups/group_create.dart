@@ -115,6 +115,12 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
               padding: EdgeInsets.all(10.0),
               child: TextFormField(
                 controller: _groupDescController,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter a description for the group.';
+                  }
+                  return null;
+                },
                 textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration(
                   labelText: 'Group description',

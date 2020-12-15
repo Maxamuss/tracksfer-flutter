@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:spotify/spotify.dart' as Spotify hide User;
+import 'package:tracksfer/screens/spotify/spotify_search.dart';
 import 'package:tracksfer/services/spotify.dart';
 
 import '../../models/Track.dart';
@@ -47,18 +48,7 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
         final Iterable tracksJson = response.data['results'];
         final List<Track> tracks =
             tracksJson.map((model) => Track.fromJson(model)).toList();
-        if (tracks.isNotEmpty) {
-          final tracksMap = Map.fromIterable(tracks,
-              key: (e) => e.spotifyId, value: (e) => e);
-          List<String> tracksIds = [];
-          tracks.forEach((track) => tracksIds.add(track.spotifyId));
-          final spotify = spotifyInit();
-          final Iterable<Spotify.Track> spotifyTracks =
-              await spotify.tracks.list(tracksIds);
-          spotifyTracks.forEach((track) {
-            tracksMap[track.id].spotifyTrack = track;
-          });
-        }
+        populateSpotifyDetails(tracks);
         setState(() {
           _tracks = tracks;
           _loading = false;
@@ -112,6 +102,17 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(widget.group.groupName),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: SpotifySearchDelegate(),
+              );
+            },
+          ),
+        ],
       ),
       body: _error
           ? errorWidget
