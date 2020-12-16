@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tracksfer/locator/locator.dart';
 
 import '../../setup/set_display_name.dart';
 import 'login_controller.dart';
 
 class LoginScreen extends StatelessWidget {
-  final _controller = G<LoginController>();
+  final _controller = LoginController();
 
   @override
   Widget build(BuildContext context) {
