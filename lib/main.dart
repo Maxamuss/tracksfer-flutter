@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tracksfer/screens/setup/set_display_name.dart';
+import 'package:tracksfer/locator/locator.dart';
 
 import 'screens/core/home.dart';
-import 'screens/core/login.dart';
-import 'screens/feed/feed.dart';
-import 'screens/groups/group_list.dart';
-import 'screens/profile/profile.dart';
+import 'screens/core/login/login_screen.dart';
 
 void main() {
+  initLocator();
   runApp(MyApp());
 }
 
