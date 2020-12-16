@@ -1,53 +1,34 @@
 import 'package:spotify/spotify.dart' as Spotify hide User;
+import 'package:tracksfer/models/observable_models/logged_user.dart';
+import 'package:tracksfer/models/observable_models/observable_group.dart';
 
-import 'Group.dart';
-import 'User.dart';
-
-class Track {
-  final String id;
-  final Group group;
-  final String spotifyId;
-  final User user;
-  final DateTime createdAt;
+abstract class Track {
+  String id;
+  ObservableGroup group;
+  String spotifyId;
+  LoggedUser user;
+  DateTime createdAt;
   Spotify.Track spotifyTrack; // Stores Spotify info about track.
 
-  Track({
-    this.id,
-    this.group,
-    this.spotifyId,
-    this.user,
-    this.createdAt,
-  });
+  // String getArtistNames() {
+  //   List<String> artistNames = [];
 
-  factory Track.fromJson(Map<String, dynamic> json) {
-    return Track(
-      id: json['id'],
-      group: Group.fromJson(json['group']),
-      spotifyId: json['spotify_id'],
-      user: User.fromJson(json['user']),
-      createdAt: DateTime.parse(json['created_at']),
-    );
-  }
+  //   if (spotifyTrack != null) {
+  //     spotifyTrack.artists.forEach((x) => artistNames.add(x.name));
+  //   }
 
-  String getArtistNames() {
-    List<String> artistNames = [];
+  //   return artistNames.join(', ');
+  // }
 
-    if (spotifyTrack != null) {
-      spotifyTrack.artists.forEach((x) => artistNames.add(x.name));
-    }
+  // String getAlbumThumbnail() {
+  //   String url = '';
 
-    return artistNames.join(', ');
-  }
+  //   if (spotifyTrack != null) {
+  //     final images = spotifyTrack.album.images;
+  //     // url = images[images.length - 1].url;
+  //     url = images[0].url;
+  //   }
 
-  String getAlbumThumbnail() {
-    String url = '';
-
-    if (spotifyTrack != null) {
-      final images = spotifyTrack.album.images;
-      // url = images[images.length - 1].url;
-      url = images[0].url;
-    }
-
-    return url;
-  }
+  //   return url;
+  // }
 }
