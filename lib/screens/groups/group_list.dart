@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:intl/intl.dart';
+import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/screens/groups/group_detail.dart';
 
 import '../../models/Group.dart';
@@ -72,6 +73,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
     _refresh();
   }
 
+  //TODO if group is going to be somehow updated individually, wrap list view in a Observer (Widget from mobx_flutter);
   @override
   Widget build(BuildContext context) {
     final errorWidget = LoadErrorWidget(
@@ -87,8 +89,9 @@ class _GroupListWidgetState extends State<GroupListWidget> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             Iterable groupsJson = snapshot.data['results'];
-            List<Group> groups =
-                groupsJson.map((model) => Group.fromJson(model)).toList();
+            List<ObservableGroup> groups = groupsJson
+                .map((model) => ObservableGroup().factoryFromJson(model))
+                .toList();
 
             if (groups.isEmpty) {
               return Center(
@@ -105,7 +108,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
               child: ListView.builder(
                 itemCount: groups.length,
                 itemBuilder: (context, index) {
-                  Group group = groups[index];
+                  ObservableGroup group = groups[index];
                   return ListTile(
                     title: Text(group.groupName),
                     subtitle: Text(group.groupDesc),

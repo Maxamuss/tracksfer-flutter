@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:spotify/spotify.dart' as Spotify hide User;
+import 'package:tracksfer/models/observable_models/observable_group.dart';
+import 'package:tracksfer/models/observable_models/observable_track.dart';
 import 'package:tracksfer/screens/spotify/spotify_search.dart';
 import 'package:tracksfer/services/spotify.dart';
 
-import '../../models/Track.dart';
-import '../../models/Group.dart';
 import '../../services/auth.dart';
 import '../../services/requests.dart';
 import '../../widgets/error.dart';
 import '../../widgets/loading.dart';
 
 class GroupDetailScreen extends StatelessWidget {
-  final Group group;
+  final ObservableGroup group;
 
   GroupDetailScreen(this.group);
 
@@ -27,7 +27,7 @@ class GroupDetailScreen extends StatelessWidget {
 }
 
 class GroupDetailWidget extends StatefulWidget {
-  final Group group;
+  final ObservableGroup group;
 
   GroupDetailWidget(this.group);
 
@@ -36,7 +36,7 @@ class GroupDetailWidget extends StatefulWidget {
 }
 
 class _GroupDetailWidgetState extends State<GroupDetailWidget> {
-  List<Track> _tracks;
+  List<ObservableTrack> _tracks;
   bool _error = false;
   bool _loading = true;
   int _page = 1;
@@ -46,8 +46,9 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
       final response = await Request.get('groups/${widget.group.id}/tracks/');
       if (response.statusCode == 200) {
         final Iterable tracksJson = response.data['results'];
-        final List<Track> tracks =
-            tracksJson.map((model) => Track.fromJson(model)).toList();
+        final List<ObservableTrack> tracks = tracksJson
+            .map((model) => ObservableTrack().factoryFromJson(model))
+            .toList();
         populateSpotifyDetails(tracks);
         setState(() {
           _tracks = tracks;
@@ -128,7 +129,7 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
                   : ListView.builder(
                       itemCount: _tracks.length,
                       itemBuilder: (context, index) {
-                        final Track track = _tracks[index];
+                        final ObservableTrack track = _tracks[index];
                         return ListTile(
                           leading: CachedNetworkImage(
                             imageUrl: track.getAlbumThumbnail(),
@@ -153,7 +154,7 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
 }
 
 class TrackModelWidget extends StatefulWidget {
-  final Track track;
+  final ObservableTrack track;
 
   TrackModelWidget(this.track);
 
