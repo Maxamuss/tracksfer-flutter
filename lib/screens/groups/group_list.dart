@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:intl/intl.dart';
-import 'package:tracksfer/screens/groups/group_detail.dart';
+import 'group_detail.dart';
 
-import '../../models/Group.dart';
+import '../../models/group.dart';
 import '../../services/auth.dart';
 import '../../services/requests.dart';
 import '../../widgets/error.dart';
@@ -23,10 +23,8 @@ class GroupListWidget extends StatefulWidget {
 }
 
 class _GroupListWidgetState extends State<GroupListWidget> {
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final _refreshController = RefreshController(initialRefresh: false);
   Future<Map<String, dynamic>> _groups;
-  bool _loading = true;
   bool _error = false;
 
   Future<Map<String, dynamic>> _getGroups() async {
@@ -37,11 +35,14 @@ class _GroupListWidgetState extends State<GroupListWidget> {
         return response.data;
       } else if (response.statusCode == 403) {
         logout(context);
+        return null;
       } else {
         _setError();
+        return null;
       }
-    } catch (e) {
+    } on Exception {
       _setError();
+      return null;
     }
   }
 
@@ -54,8 +55,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
 
   void _setError() {
     setState(() {
-      this._error = true;
-      this._loading = false;
+      _error = true;
     });
   }
 
@@ -87,11 +87,11 @@ class _GroupListWidgetState extends State<GroupListWidget> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             Iterable groupsJson = snapshot.data['results'];
-            List<Group> groups =
+            final groups =
                 groupsJson.map((model) => Group.fromJson(model)).toList();
 
             if (groups.isEmpty) {
-              return Center(
+              return const Center(
                 child: Text('You are not in any groups yet'),
               );
             }
@@ -99,13 +99,13 @@ class _GroupListWidgetState extends State<GroupListWidget> {
             return SmartRefresher(
               enablePullDown: true,
               // enablePullUp: false,
-              header: ClassicHeader(),
+              header: const ClassicHeader(),
               controller: _refreshController,
               onRefresh: _refresh,
               child: ListView.builder(
                 itemCount: groups.length,
                 itemBuilder: (context, index) {
-                  Group group = groups[index];
+                  final group = groups[index];
                   return ListTile(
                     title: Text(group.groupName),
                     subtitle: Text(group.groupDesc),
@@ -129,7 +129,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
           } else if (snapshot.hasError) {
             return errorWidget;
           }
-          return Center(
+          return const Center(
             child: LoadingWidget(),
           );
         },

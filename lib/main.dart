@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tracksfer/screens/setup/set_display_name.dart';
 
 import 'screens/core/home.dart';
 import 'screens/core/login.dart';
-import 'screens/feed/feed.dart';
-import 'screens/groups/group_list.dart';
-import 'screens/profile/profile.dart';
 
 void main() {
   runApp(MyApp());

@@ -1,5 +1,5 @@
-import 'User.dart';
 import '../services/utils.dart';
+import 'user.dart';
 
 class Comment {
   final String id;

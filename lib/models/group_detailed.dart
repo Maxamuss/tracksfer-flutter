@@ -1,4 +1,4 @@
-import 'User.dart';
+import 'user.dart';
 import '../services/utils.dart';
 
 class GroupDetailed {
@@ -24,8 +24,8 @@ class GroupDetailed {
   factory GroupDetailed.fromJson(Map<String, dynamic> json) {
     Iterable usersJson = json['users'];
     Iterable pendingUsersJson = json['pending_users'];
-    List<User> users = usersJson.map((model) => User.fromJson(model)).toList();
-    List<User> pendingUsers =
+    final users = usersJson.map((model) => User.fromJson(model)).toList();
+    final pendingUsers =
         pendingUsersJson.map((model) => User.fromJson(model)).toList();
 
     return GroupDetailed(

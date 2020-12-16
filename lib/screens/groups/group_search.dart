@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:tracksfer/models/Group.dart';
-import 'package:tracksfer/services/auth.dart';
-import 'package:tracksfer/services/requests.dart';
-import 'package:tracksfer/widgets/error.dart';
-import 'package:tracksfer/widgets/loading.dart';
+import '../../models/group.dart';
+import '../../services/auth.dart';
+import '../../services/requests.dart';
+import '../../widgets/error.dart';
+import '../../widgets/loading.dart';
 
 class GroupSearchDelegate extends SearchDelegate {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -23,7 +23,7 @@ class GroupSearchDelegate extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -32,11 +32,11 @@ class GroupSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    if (query.length < 1) {
+    if (query.isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Center(
+          const Center(
             child: Text(
               'Please enter a search term to find a group.',
             ),
@@ -50,7 +50,6 @@ class GroupSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
     return Column();
   }
 }
@@ -65,7 +64,6 @@ class SearchResultsWidget extends StatefulWidget {
 }
 
 class _SearchResultsWidgetState extends State<SearchResultsWidget> {
-  bool _loading = true;
   bool _error = false;
 
   Future<Map<String, dynamic>> _getSearchResults() async {
@@ -75,18 +73,20 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
         return response.data;
       } else if (response.statusCode == 403) {
         logout(context);
+        return null;
       } else {
         _setError();
+        return null;
       }
-    } catch (e) {
+    } on Exception {
       _setError();
+      return null;
     }
   }
 
   void _setError() {
     setState(() {
-      this._error = true;
-      this._loading = false;
+      _error = true;
     });
   }
 
@@ -97,7 +97,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final errorWidget = LoadErrorWidget(
+    final errorWidget = const LoadErrorWidget(
       errorMessage: 'Failed to load search results.',
       function: null,
     );
@@ -111,11 +111,11 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           Iterable groupsJson = snapshot.data['results'];
-          List<Group> groups =
+          final groups =
               groupsJson.map((model) => Group.fromJson(model)).toList();
 
           if (groups.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('No groups matching search query.'),
             );
           }
@@ -123,7 +123,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
           return ListView.builder(
             itemCount: groups.length,
             itemBuilder: (context, index) {
-              Group group = groups[index];
+              final group = groups[index];
               return ListTile(
                 title: Text(group.groupName),
                 subtitle: Text(group.groupDesc),
@@ -133,7 +133,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
         } else if (snapshot.hasError) {
           return errorWidget;
         }
-        return Center(
+        return const Center(
           child: LoadingWidget(),
         );
       },
@@ -159,9 +159,9 @@ class _GroupJoinWidgetState extends State<GroupJoinWidget> {
           backgroundColor: Colors.white,
           navigationBar: CupertinoNavigationBar(
             transitionBetweenRoutes: false,
-            middle: Text('Normal Navigation Presentation'),
+            middle: const Text('Normal Navigation Presentation'),
             trailing: GestureDetector(
-                child: Icon(Icons.arrow_upward),
+                child: const Icon(Icons.arrow_upward),
                 onTap: () => CupertinoScaffold.showCupertinoModalBottomSheet(
                       expand: true,
                       context: context,
@@ -177,14 +177,16 @@ class _GroupJoinWidgetState extends State<GroupJoinWidget> {
                             child: MaterialButton(
                               onPressed: () => Navigator.of(context).popUntil(
                                   (route) => route.settings.name == '/'),
-                              child: Text('Pop back home'),
+                              child: const Text('Pop back home'),
                             ),
                           )
                         ],
                       ),
                     )),
           ),
-          child: Center(child: Container()),
+          child: Center(
+            child: Container(),
+          ),
         ),
       ),
     );

@@ -1,12 +1,12 @@
-import 'package:spotify/spotify.dart' as Spotify;
-import 'package:tracksfer/models/Track.dart';
+import 'package:spotify/spotify.dart' as spotify;
+import '../models/track.dart';
 
-Spotify.SpotifyApi spotifyInit() {
-  var credentials = Spotify.SpotifyApiCredentials(
+spotify.SpotifyApi spotifyInit() {
+  var credentials = spotify.SpotifyApiCredentials(
     '549d7e8076914f5b91d4c00578bf604f',
     '827d0fc220ce493180afa504b2244356',
   );
-  return Spotify.SpotifyApi(credentials);
+  return spotify.SpotifyApi(credentials);
 }
 
 // This method takes a list of Tracks, gets the Spotify data for them and then
@@ -17,17 +17,19 @@ Future<void> populateSpotifyDetails(List<Track> tracks) async {
     final tracksMap =
         Map.fromIterable(tracks, key: (e) => e.spotifyId, value: (e) => e);
 
-    List<String> tracksIds = [];
-    tracks.forEach((track) => tracksIds.add(track.spotifyId));
+    final tracksIds = <String>[];
+    for (var track in tracks) {
+      tracksIds.add(track.spotifyId);
+    }
 
     // Get the Spotify Tracks.
     final spotify = spotifyInit();
     try {
-      final Iterable<Spotify.Track> spotifyTracks =
+      final spotifyTracks =
           await spotify.tracks.list(tracksIds);
-      spotifyTracks.forEach((track) {
+      for (var track in spotifyTracks) {
         tracksMap[track.id].spotifyTrack = track;
-      });
+      }
     } on Exception {}
   }
 }

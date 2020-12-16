@@ -30,15 +30,15 @@ class _HomeWidgetState extends State<HomeWidget> {
   ];
   final List<Widget> _children = [
     GroupListScreen(),
-    FeedScreen(),
+    const FeedScreen(),
     ProfileScreen(),
   ];
 
   void _onTabTapped(int index) {
-    String title = _titles[index];
+    final title = _titles[index];
     setState(() {
-      this._currentIndex = index;
-      this._appBarTitle = title;
+      _currentIndex = index;
+      _appBarTitle = title;
     });
   }
 
@@ -65,15 +65,15 @@ class _HomeWidgetState extends State<HomeWidget> {
         onTap: _onTabTapped,
         currentIndex: _currentIndex,
         items: [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.group),
             label: '',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.rss_feed),
             label: '',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: '',
           )
@@ -87,7 +87,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
     if (_currentIndex == 0) {
       leading = IconButton(
-        icon: Icon(Icons.search),
+        icon: const Icon(Icons.search),
         onPressed: () {
           showSearch(
             context: context,
@@ -110,7 +110,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     if (_currentIndex == 0) {
       actions = [
         IconButton(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           onPressed: () {
             Navigator.push(
               context,
@@ -126,7 +126,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     } else {
       actions = [
         IconButton(
-          icon: Icon(Icons.settings),
+          icon: const Icon(Icons.settings),
           onPressed: () {
             Navigator.push(
               context,

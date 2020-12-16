@@ -19,10 +19,10 @@ class LoadErrorWidget extends StatelessWidget {
             errorMessage,
             // style: Theme.of(context).textTheme.headline3,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           GestureDetector(
             onTap: function,
-            child: Icon(
+            child: const Icon(
               Icons.refresh,
               size: 50,
             ),

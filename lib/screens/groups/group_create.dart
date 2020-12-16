@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tracksfer/models/Group.dart';
-import 'package:tracksfer/screens/groups/group_detail.dart';
-import 'package:tracksfer/services/auth.dart';
-import 'package:tracksfer/services/requests.dart';
-import 'package:tracksfer/widgets/error.dart';
+import '../../models/group.dart';
+import 'group_detail.dart';
+import '../../services/auth.dart';
+import '../../services/requests.dart';
+import '../../widgets/error.dart';
 
 class GroupCreateScreen extends StatelessWidget {
   @override
@@ -11,7 +11,7 @@ class GroupCreateScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Create Group'),
+        title: const Text('Create Group'),
       ),
       body: GroupCreateWidget(),
     );
@@ -37,7 +37,7 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
     try {
       final response = await Request.post('groups/', formData);
       if (response.statusCode == 201) {
-        final Group group = Group.fromJson(response.data);
+        final group = Group.fromJson(response.data);
         Navigator.pop(context);
         Navigator.push(
           context,
@@ -50,20 +50,20 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
       } else {
         _setError();
       }
-    } catch (e) {
+    } on Exception {
       _setError();
     }
   }
 
   void _setError() {
     setState(() {
-      this._error = true;
+      _error = true;
     });
   }
 
   void _refresh() {
     setState(() {
-      this._error = false;
+      _error = false;
     });
   }
 
@@ -89,7 +89,7 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                 controller: _groupNameController,
                 validator: (value) {
@@ -100,7 +100,7 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
                 },
                 autofocus: true,
                 textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Group name',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
@@ -112,7 +112,7 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                 controller: _groupDescController,
                 validator: (value) {
@@ -122,7 +122,7 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
                   return null;
                 },
                 textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Group description',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
@@ -134,18 +134,19 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
               ),
             ),
             Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: Center(
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        _createGroup();
-                      }
-                    },
-                    child: Icon(Icons.add),
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
-                )),
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: FloatingActionButton(
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      _createGroup();
+                    }
+                  },
+                  child: const Icon(Icons.add),
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
           ],
         ),
       ),

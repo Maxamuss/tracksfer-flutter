@@ -23,12 +23,10 @@ class SetDisplayNameWidget extends StatefulWidget {
 }
 
 class _SetDisplayNameWidgetState extends State<SetDisplayNameWidget> {
-  void _updateDisplayName() {}
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text(''),
+      child: const Text(''),
     );
   }
 }

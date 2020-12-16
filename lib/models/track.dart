@@ -1,7 +1,7 @@
-import 'package:spotify/spotify.dart' as Spotify hide User;
+import 'package:spotify/spotify.dart' as spotify hide User;
 
-import 'Group.dart';
-import 'User.dart';
+import 'group.dart';
+import 'user.dart';
 
 class Track {
   final String id;
@@ -9,7 +9,7 @@ class Track {
   final String spotifyId;
   final User user;
   final DateTime createdAt;
-  Spotify.Track spotifyTrack; // Stores Spotify info about track.
+  spotify.Track spotifyTrack; // Stores Spotify info about track.
 
   Track({
     this.id,
@@ -30,17 +30,19 @@ class Track {
   }
 
   String getArtistNames() {
-    List<String> artistNames = [];
+    final artistNames = [];
 
     if (spotifyTrack != null) {
-      spotifyTrack.artists.forEach((x) => artistNames.add(x.name));
+      for (var artist in spotifyTrack.artists) {
+        artistNames.add(artist.name);
+      }
     }
 
     return artistNames.join(', ');
   }
 
   String getAlbumThumbnail() {
-    String url = '';
+    var url = '';
 
     if (spotifyTrack != null) {
       final images = spotifyTrack.album.images;

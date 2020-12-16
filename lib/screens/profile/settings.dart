@@ -7,12 +7,12 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Container(
         child: RaisedButton(
           onPressed: () => logout(context),
-          child: Text('Logout'),
+          child: const Text('Logout'),
         ),
       ),
     );

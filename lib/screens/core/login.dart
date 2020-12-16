@@ -27,7 +27,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   void login() async {
     try {
       final responseUri = await FlutterWebAuth.authenticate(
-        url: Request.url + 'oauth/login/spotify/',
+        url: '${Request.url}oauth/login/spotify/',
         callbackUrlScheme: 'tracksfer',
       );
       print(responseUri.toString());
@@ -46,7 +46,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       setAuthToken(authToken);
       setSpotifyAccessToken(accessToken);
       _sendToNextScreen(newUser, displayName);
-    } catch (e) {
+    } on Exception catch (e) {
       print(e.toString());
     }
   }
@@ -55,11 +55,12 @@ class _LoginWidgetState extends State<LoginWidget> {
     if (newUser) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (context) => SetDisplayNameScreen(displayName)),
-          (Route<dynamic> route) => false);
+            builder: (context) => SetDisplayNameScreen(displayName),
+          ),
+          (route) => false);
     } else {
       Navigator.of(context)
-          .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+          .pushNamedAndRemoveUntil('/home', (route) => false);
     }
   }
 
@@ -80,8 +81,8 @@ class _LoginWidgetState extends State<LoginWidget> {
     return SafeArea(
       child: Center(
         child: RaisedButton(
-          onPressed: () => login(),
-          child: Text('Login with Spotify'),
+          onPressed: login,
+          child: const Text('Login with Spotify'),
         ),
       ),
     );

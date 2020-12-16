@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 bool get isInDebugMode {
-  bool inDebugMode = false;
-  assert(inDebugMode = true);
+  final inDebugMode = false;
+  assert(inDebugMode);
   return inDebugMode;
 }
 
 // Used to render emojis
 String decodeString(String string) {
-  List<int> bytes = string.codeUnits;
+  final bytes = string.codeUnits;
   return utf8.decode(bytes);
 }

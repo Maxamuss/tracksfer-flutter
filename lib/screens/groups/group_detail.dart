@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:spotify/spotify.dart' as Spotify hide User;
-import 'package:tracksfer/screens/spotify/spotify_search.dart';
-import 'package:tracksfer/services/spotify.dart';
+import '../spotify/spotify_search.dart';
+import '../../services/spotify.dart';
 
-import '../../models/Track.dart';
-import '../../models/Group.dart';
+import '../../models/track.dart';
+import '../../models/group.dart';
 import '../../services/auth.dart';
 import '../../services/requests.dart';
 import '../../widgets/error.dart';
@@ -39,14 +38,13 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
   List<Track> _tracks;
   bool _error = false;
   bool _loading = true;
-  int _page = 1;
 
   void _getTracks() async {
     try {
       final response = await Request.get('groups/${widget.group.id}/tracks/');
       if (response.statusCode == 200) {
-        final Iterable tracksJson = response.data['results'];
-        final List<Track> tracks =
+        final tracksJson = response.data['results'];
+        final tracks =
             tracksJson.map((model) => Track.fromJson(model)).toList();
         populateSpotifyDetails(tracks);
         setState(() {
@@ -58,7 +56,7 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
       } else {
         _setError();
       }
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       _setError();
     }
@@ -73,8 +71,8 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
 
   void _setError() {
     setState(() {
-      this._error = true;
-      this._loading = false;
+      _error = true;
+      _loading = false;
     });
   }
 
@@ -104,7 +102,7 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
         title: Text(widget.group.groupName),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               showSearch(
                 context: context,
@@ -117,28 +115,30 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
       body: _error
           ? errorWidget
           : _loading
-              ? LoadingWidget()
+              ? const LoadingWidget()
               : _tracks.isEmpty
-                  ? Center(
+                  ? const Center(
                       child: Text(
-                        'No tracks have been added to this group yet! Why not add one now?',
+                        '''No tracks have been added to this group yet! Why not add one now?''',
                         textAlign: TextAlign.center,
                       ),
                     )
                   : ListView.builder(
                       itemCount: _tracks.length,
                       itemBuilder: (context, index) {
-                        final Track track = _tracks[index];
+                        final track = _tracks[index];
                         return ListTile(
                           leading: CachedNetworkImage(
                             imageUrl: track.getAlbumThumbnail(),
                             placeholder: (context, url) =>
-                                CircularProgressIndicator(),
+                                const CircularProgressIndicator(),
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                const Icon(Icons.error),
                           ),
                           title: Text(track.spotifyTrack.name),
-                          subtitle: Text(track.getArtistNames()),
+                          subtitle: Text(
+                            track.getArtistNames(),
+                          ),
                           onTap: () {
                             showCupertinoModalBottomSheet(
                               context: context,
