@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracksfer/models/Group.dart';
+import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/screens/groups/group_detail.dart';
 import 'package:tracksfer/services/auth.dart';
 import 'package:tracksfer/services/requests.dart';
@@ -37,7 +38,7 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
     try {
       final response = await Request.post('groups/', formData);
       if (response.statusCode == 201) {
-        final Group group = Group.fromJson(response.data);
+        final group = ObservableGroup().factoryFromJson(response.data);
         Navigator.pop(context);
         Navigator.push(
           context,

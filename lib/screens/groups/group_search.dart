@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:tracksfer/models/Group.dart';
+import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/services/auth.dart';
 import 'package:tracksfer/services/requests.dart';
 import 'package:tracksfer/widgets/error.dart';
@@ -111,8 +112,9 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           Iterable groupsJson = snapshot.data['results'];
-          List<Group> groups =
-              groupsJson.map((model) => Group.fromJson(model)).toList();
+          List<ObservableGroup> groups = groupsJson
+              .map((model) => ObservableGroup().factoryFromJson(model))
+              .toList();
 
           if (groups.isEmpty) {
             return Center(
@@ -123,7 +125,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
           return ListView.builder(
             itemCount: groups.length,
             itemBuilder: (context, index) {
-              Group group = groups[index];
+              ObservableGroup group = groups[index];
               return ListTile(
                 title: Text(group.groupName),
                 subtitle: Text(group.groupDesc),
@@ -142,7 +144,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
 }
 
 class GroupJoinWidget extends StatefulWidget {
-  final Group group;
+  final ObservableGroup group;
 
   GroupJoinWidget(this.group);
 
