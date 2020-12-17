@@ -23,6 +23,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   // FirebaseMessaging _fcm = FirebaseMessaging();
   int _currentIndex = 1;
   String _appBarTitle;
+
   final List<String> _titles = [
     'Groups',
     'Feed',
@@ -33,14 +34,6 @@ class _HomeWidgetState extends State<HomeWidget> {
     FeedScreen(),
     ProfileScreen(),
   ];
-
-  void _onTabTapped(int index) {
-    String title = _titles[index];
-    setState(() {
-      this._currentIndex = index;
-      this._appBarTitle = title;
-    });
-  }
 
   @override
   void initState() {
@@ -80,6 +73,14 @@ class _HomeWidgetState extends State<HomeWidget> {
         ],
       ),
     );
+  }
+
+  void _onTabTapped(int index) {
+    String title = _titles[index];
+    setState(() {
+      this._currentIndex = index;
+      this._appBarTitle = title;
+    });
   }
 
   Widget _getLeading() {

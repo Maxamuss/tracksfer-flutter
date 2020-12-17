@@ -9,8 +9,8 @@ Spotify.SpotifyApi spotifyInit() {
   return Spotify.SpotifyApi(credentials);
 }
 
-// This method takes a list of Tracks, gets the Spotify data for them and then
-// adds the spotify data to the Track model.
+/// This method takes a list of Tracks, gets the Spotify data for them and then
+/// adds the spotify data to the Track model.
 Future<void> populateSpotifyDetails(List<Track> tracks) async {
   if (tracks.isNotEmpty) {
     // Create map for tracks with key being the Spotify track id.

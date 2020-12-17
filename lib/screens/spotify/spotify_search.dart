@@ -69,28 +69,6 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
   bool _loading = true;
   bool _error = false;
 
-  Future<Map<String, dynamic>> _getSearchResults() async {
-    try {
-      final response = await Request.get('groups/search/?q=${widget.query}');
-      if (response.statusCode == 200) {
-        return response.data;
-      } else if (response.statusCode == 403) {
-        logout(context);
-      } else {
-        _setError();
-      }
-    } catch (e) {
-      _setError();
-    }
-  }
-
-  void _setError() {
-    setState(() {
-      this._error = true;
-      this._loading = false;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -140,6 +118,28 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
         );
       },
     );
+  }
+
+  Future<Map<String, dynamic>> _getSearchResults() async {
+    try {
+      final response = await Request.get('groups/search/?q=${widget.query}');
+      if (response.statusCode == 200) {
+        return response.data;
+      } else if (response.statusCode == 403) {
+        logout(context);
+      } else {
+        _setError();
+      }
+    } catch (e) {
+      _setError();
+    }
+  }
+
+  void _setError() {
+    setState(() {
+      this._error = true;
+      this._loading = false;
+    });
   }
 }
 

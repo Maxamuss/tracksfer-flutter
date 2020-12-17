@@ -6,7 +6,7 @@ bool get isInDebugMode {
   return inDebugMode;
 }
 
-// Used to render emojis
+/// Used to render emojis
 String decodeString(String string) {
   List<int> bytes = string.codeUnits;
   return utf8.decode(bytes);

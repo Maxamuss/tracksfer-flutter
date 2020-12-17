@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/screens/groups/group_detail.dart';
 
-import '../../models/Group.dart';
 import '../../services/auth.dart';
 import '../../services/requests.dart';
 import '../../widgets/error.dart';
@@ -30,36 +29,6 @@ class _GroupListWidgetState extends State<GroupListWidget> {
   bool _loading = true;
   bool _error = false;
 
-  Future<Map<String, dynamic>> _getGroups() async {
-    try {
-      final response = await Request.get('groups/');
-      if (response.statusCode == 200) {
-        _refreshController.refreshCompleted();
-        return response.data;
-      } else if (response.statusCode == 403) {
-        logout(context);
-      } else {
-        _setError();
-      }
-    } catch (e) {
-      _setError();
-    }
-  }
-
-  void _refresh() {
-    setState(() {
-      _error = false;
-      _groups = _getGroups();
-    });
-  }
-
-  void _setError() {
-    setState(() {
-      this._error = true;
-      this._loading = false;
-    });
-  }
-
   @override
   void setState(fn) {
     if (mounted) {
@@ -73,7 +42,6 @@ class _GroupListWidgetState extends State<GroupListWidget> {
     _refresh();
   }
 
-  //TODO if group is going to be somehow updated individually, wrap list view in a Observer (Widget from mobx_flutter);
   @override
   Widget build(BuildContext context) {
     final errorWidget = LoadErrorWidget(
@@ -138,5 +106,35 @@ class _GroupListWidgetState extends State<GroupListWidget> {
         },
       );
     }
+  }
+
+  Future<Map<String, dynamic>> _getGroups() async {
+    try {
+      final response = await Request.get('groups/');
+      if (response.statusCode == 200) {
+        _refreshController.refreshCompleted();
+        return response.data;
+      } else if (response.statusCode == 403) {
+        logout(context);
+      } else {
+        _setError();
+      }
+    } catch (e) {
+      _setError();
+    }
+  }
+
+  void _refresh() {
+    setState(() {
+      _error = false;
+      _groups = _getGroups();
+    });
+  }
+
+  void _setError() {
+    setState(() {
+      this._error = true;
+      this._loading = false;
+    });
   }
 }

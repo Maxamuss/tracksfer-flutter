@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:spotify/spotify.dart' as Spotify hide User;
 import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/models/observable_models/observable_track.dart';
 import 'package:tracksfer/screens/spotify/spotify_search.dart';
@@ -39,7 +38,81 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
   List<ObservableTrack> _tracks;
   bool _error = false;
   bool _loading = true;
-  int _page = 1;
+  //int _page = 1;
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(widget.group.groupName),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: SpotifySearchDelegate(),
+                );
+              },
+            ),
+          ],
+        ),
+        body: body());
+  }
+
+  Widget body() {
+    if (_error) {
+      return LoadErrorWidget(
+        errorMessage: 'Failed to load group.',
+        function: _refresh,
+      );
+    } else if (_loading) {
+      return LoadingWidget();
+    } else if (_tracks.isEmpty) {
+      return Center(
+        child: Text(
+          'No tracks have been added to this group yet! Why not add one now?',
+          textAlign: TextAlign.center,
+        ),
+      );
+    } else {
+      return ListView.builder(
+        itemCount: _tracks.length,
+        itemBuilder: (context, index) {
+          final ObservableTrack track = _tracks[index];
+          return ListTile(
+            leading: CachedNetworkImage(
+              imageUrl: track.getAlbumThumbnail(),
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ),
+            title: Text(track.spotifyTrack.name),
+            subtitle: Text(track.getArtistNames()),
+            onTap: () {
+              showCupertinoModalBottomSheet(
+                context: context,
+                builder: (context) => TrackModelWidget(track),
+              );
+            },
+          );
+        },
+      );
+    }
+  }
 
   void _getTracks() async {
     try {
@@ -77,79 +150,6 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
       this._error = true;
       this._loading = false;
     });
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _refresh();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final errorWidget = LoadErrorWidget(
-      errorMessage: 'Failed to load group.',
-      function: _refresh,
-    );
-
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(widget.group.groupName),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: SpotifySearchDelegate(),
-              );
-            },
-          ),
-        ],
-      ),
-      body: _error
-          ? errorWidget
-          : _loading
-              ? LoadingWidget()
-              : _tracks.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No tracks have been added to this group yet! Why not add one now?',
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: _tracks.length,
-                      itemBuilder: (context, index) {
-                        final ObservableTrack track = _tracks[index];
-                        return ListTile(
-                          leading: CachedNetworkImage(
-                            imageUrl: track.getAlbumThumbnail(),
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                          ),
-                          title: Text(track.spotifyTrack.name),
-                          subtitle: Text(track.getArtistNames()),
-                          onTap: () {
-                            showCupertinoModalBottomSheet(
-                              context: context,
-                              builder: (context) => TrackModelWidget(track),
-                            );
-                          },
-                        );
-                      },
-                    ),
-    );
   }
 }
 
