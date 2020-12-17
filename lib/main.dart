@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracksfer/locator/locator.dart';
+import 'package:tracksfer/screens/core/splash/splash_screen.dart';
 
 import 'screens/core/home.dart';
 import 'screens/core/login/login_screen.dart';
@@ -33,9 +34,10 @@ class MyApp extends StatelessWidget {
         // primaryColor: Color(0xffFCFBF8),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: {
         '/': (_) => LoginScreen(),
+        '/splash': (_) => SplashScreen(),
         '/home': (_) => HomeScreen(),
       },
     );
