@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:tracksfer/models/Group.dart';
 import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/services/auth.dart';
 import 'package:tracksfer/services/requests.dart';
@@ -69,28 +68,6 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
   bool _loading = true;
   bool _error = false;
 
-  Future<Map<String, dynamic>> _getSearchResults() async {
-    try {
-      final response = await Request.get('groups/search/?q=${widget.query}');
-      if (response.statusCode == 200) {
-        return response.data;
-      } else if (response.statusCode == 403) {
-        logout(context);
-      } else {
-        _setError();
-      }
-    } catch (e) {
-      _setError();
-    }
-  }
-
-  void _setError() {
-    setState(() {
-      this._error = true;
-      this._loading = false;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -140,6 +117,28 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
         );
       },
     );
+  }
+
+  Future<Map<String, dynamic>> _getSearchResults() async {
+    try {
+      final response = await Request.get('groups/search/?q=${widget.query}');
+      if (response.statusCode == 200) {
+        return response.data;
+      } else if (response.statusCode == 403) {
+        logout(context);
+      } else {
+        _setError();
+      }
+    } catch (e) {
+      _setError();
+    }
+  }
+
+  void _setError() {
+    setState(() {
+      this._error = true;
+      this._loading = false;
+    });
   }
 }
 

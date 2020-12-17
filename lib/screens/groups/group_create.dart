@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tracksfer/models/Group.dart';
 import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/screens/groups/group_detail.dart';
 import 'package:tracksfer/services/auth.dart';
@@ -29,51 +28,6 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
   final _groupNameController = TextEditingController();
   final _groupDescController = TextEditingController();
   bool _error = false;
-
-  Future<void> _createGroup() async {
-    final formData = {
-      'group_name': _groupNameController.text,
-      'group_desc': _groupDescController.text
-    };
-    try {
-      final response = await Request.post('groups/', formData);
-      if (response.statusCode == 201) {
-        final group = ObservableGroup().factoryFromJson(response.data);
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GroupDetailScreen(group),
-          ),
-        );
-      } else if (response.statusCode == 403) {
-        logout(context);
-      } else {
-        _setError();
-      }
-    } catch (e) {
-      _setError();
-    }
-  }
-
-  void _setError() {
-    setState(() {
-      this._error = true;
-    });
-  }
-
-  void _refresh() {
-    setState(() {
-      this._error = false;
-    });
-  }
-
-  @override
-  void dispose() {
-    _groupNameController.dispose();
-    _groupDescController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,5 +105,50 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
         ),
       ),
     );
+  }
+
+  Future<void> _createGroup() async {
+    final formData = {
+      'group_name': _groupNameController.text,
+      'group_desc': _groupDescController.text
+    };
+    try {
+      final response = await Request.post('groups/', formData);
+      if (response.statusCode == 201) {
+        final group = ObservableGroup().factoryFromJson(response.data);
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GroupDetailScreen(group),
+          ),
+        );
+      } else if (response.statusCode == 403) {
+        logout(context);
+      } else {
+        _setError();
+      }
+    } catch (e) {
+      _setError();
+    }
+  }
+
+  void _setError() {
+    setState(() {
+      this._error = true;
+    });
+  }
+
+  void _refresh() {
+    setState(() {
+      this._error = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    _groupNameController.dispose();
+    _groupDescController.dispose();
+    super.dispose();
   }
 }
