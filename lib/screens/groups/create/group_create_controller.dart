@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tracksfer/locator/locator.dart';
 import 'package:tracksfer/models/observable_models/observable_group.dart';
+import 'package:tracksfer/screens/groups/list/group_list_controller.dart';
 import 'package:tracksfer/services/auth.dart';
 import 'package:tracksfer/services/navigation/navigation_controller.dart';
 import 'package:tracksfer/services/navigation/navigation_routes.dart';
@@ -32,6 +33,7 @@ abstract class _CreateGroupControllerBase with Store {
       if (response.statusCode == 201) {
         var navigator = G.get<NavigationController>();
         final group = ObservableGroup().factoryFromJson(response.data);
+        G.get<GroupListController>().addGroup(group);
         navigator.pop();
         navigator.push(GROUP_DETAILS_ROUTE, arguments: group);
       } else if (response.statusCode == 403) {
