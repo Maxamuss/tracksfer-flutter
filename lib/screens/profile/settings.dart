@@ -11,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: Container(
         child: RaisedButton(
-          onPressed: () => logout(context),
+          onPressed: () => logout(),
           child: Text('Logout'),
         ),
       ),

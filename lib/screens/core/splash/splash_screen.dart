@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:tracksfer/locator/locator.dart';
 import 'package:tracksfer/services/auth.dart';
+import 'package:tracksfer/services/navigation/navigation_controller.dart';
+import 'package:tracksfer/services/navigation/navigation_routes.dart';
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({Key key}) : super(key: key);
+  final navigator = G.get<NavigationController>();
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 5), () => _sendToNextScreen(context));
+    Future.delayed(Duration(seconds: 5), () => _sendToNextScreen());
 
     return Scaffold(
       body: Container(
@@ -53,12 +57,12 @@ class SplashScreen extends StatelessWidget {
     );
   }
 
-  void _sendToNextScreen(context) async {
+  void _sendToNextScreen() async {
     var token = await getAuthToken();
     if (token == null) {
-      Navigator.of(context).pushReplacementNamed('/');
+      navigator.replaceWith(LOGIN_ROUTE);
     } else {
-      Navigator.of(context).pushReplacementNamed('/home');
+      navigator.replaceWith(HOME_ROUTE);
     }
   }
 }

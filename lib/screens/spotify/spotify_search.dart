@@ -126,7 +126,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
       if (response.statusCode == 200) {
         return response.data;
       } else if (response.statusCode == 403) {
-        logout(context);
+        logout();
       } else {
         _setError();
       }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../feed/feed.dart';
-import '../groups/group_create.dart';
+import '../groups/create/group_create.dart';
 import '../groups/group_list.dart';
 import '../groups/group_search.dart';
 import '../profile/profile.dart';
