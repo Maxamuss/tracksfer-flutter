@@ -128,7 +128,7 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
           _loading = false;
         });
       } else if (response.statusCode == 403) {
-        logout(context);
+        logout();
       } else {
         _setError();
       }

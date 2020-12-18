@@ -115,7 +115,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
         _refreshController.refreshCompleted();
         return response.data;
       } else if (response.statusCode == 403) {
-        logout(context);
+        logout();
       } else {
         _setError();
       }
