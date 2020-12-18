@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracksfer/models/observable_models/observable_group.dart';
-import 'package:tracksfer/screens/core/home.dart';
+import 'package:tracksfer/screens/core/home/home.dart';
 import 'package:tracksfer/screens/core/login/login_screen.dart';
 import 'package:tracksfer/screens/core/splash/splash_screen.dart';
 import 'package:tracksfer/screens/groups/create/group_create.dart';
