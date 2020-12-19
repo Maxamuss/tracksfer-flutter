@@ -4,7 +4,7 @@ import 'package:tracksfer/screens/core/home/home.dart';
 import 'package:tracksfer/screens/core/login/login_screen.dart';
 import 'package:tracksfer/screens/core/splash/splash_screen.dart';
 import 'package:tracksfer/screens/groups/create/group_create.dart';
-import 'package:tracksfer/screens/groups/group_detail.dart';
+import 'package:tracksfer/screens/groups/detailed/group_detail.dart';
 import 'package:tracksfer/screens/profile/settings.dart';
 
 const LOGIN_ROUTE = '/';
