@@ -29,7 +29,7 @@ class _GroupCreateWidgetState extends State<GroupCreateWidget> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
-        if (_controller.error) {
+        if (_controller.hasError) {
           return LoadErrorWidget(
             errorMessage: 'Failed to create group.',
             function: _controller.refresh,

@@ -61,6 +61,8 @@ abstract class _GroupDetailControllerBase with Store {
       print(e);
       _setError();
     }
+    _loading = false;
+    return null;
   }
 
   @action

@@ -43,9 +43,9 @@ class _GroupListWidgetState extends State<GroupListWidget> {
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
-      if (_controller.loading) {
+      if (_controller.isLoading) {
         return LoadingWidget();
-      } else if (_controller.error) {
+      } else if (_controller.hasError) {
         return errorWidget;
       } else if (_controller.isEmpty) {
         return Center(
@@ -61,7 +61,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
           child: ListView.builder(
             itemCount: _controller.length,
             itemBuilder: (context, index) {
-              ObservableGroup group = _controller.groupList[index];
+              ObservableGroup group = _controller.groups[index];
               return ListTile(
                 title: Text(group.groupName),
                 subtitle: Text(group.groupDesc),

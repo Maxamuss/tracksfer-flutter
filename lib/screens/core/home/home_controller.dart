@@ -12,17 +12,17 @@ part 'home_controller.g.dart';
 class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store {
-  final List<String> titles = [
+  final List<String> _titles = [
     'Groups',
     'Feed',
     'Profile',
   ];
-  final List<Widget> children = [
+  final List<Widget> _children = [
     GroupListScreen(),
     FeedScreen(),
     ProfileScreen(),
   ];
-  final List<Widget> actions = [
+  final List<Widget> _actions = [
     IconButton(
       icon: Icon(Icons.add),
       onPressed: () {
@@ -42,13 +42,13 @@ abstract class _HomeControllerBase with Store {
   int currentIndex = 1;
 
   @computed
-  String get appBarTitle => titles[currentIndex];
+  String get appBarTitle => _titles[currentIndex];
 
   @computed
-  Widget get currentBody => children[currentIndex];
+  Widget get currentBody => _children[currentIndex];
 
   @computed
-  List<Widget> get currentAction => [actions[currentIndex]];
+  List<Widget> get currentAction => [_actions[currentIndex]];
 
   @action
   void onTabTapped(int index) {
