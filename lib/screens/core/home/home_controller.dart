@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tracksfer/locator/locator.dart';
 import 'package:tracksfer/screens/feed/feed.dart';
-import 'package:tracksfer/screens/groups/group_list.dart';
+import 'package:tracksfer/screens/groups/list/group_list.dart';
 import 'package:tracksfer/screens/groups/group_search.dart';
 import 'package:tracksfer/screens/profile/profile.dart';
 import 'package:tracksfer/services/navigation/navigation_controller.dart';
