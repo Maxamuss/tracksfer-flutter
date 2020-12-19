@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/models/observable_models/observable_track.dart';
+import 'package:tracksfer/screens/groups/detailed/group_detail_controller.dart';
 import 'package:tracksfer/screens/spotify/spotify_search.dart';
-import 'package:tracksfer/services/spotify.dart';
 
-import '../../services/auth.dart';
-import '../../services/requests.dart';
-import '../../widgets/error.dart';
-import '../../widgets/loading.dart';
+import '../../../widgets/error.dart';
+import '../../../widgets/loading.dart';
 
 class GroupDetailScreen extends StatelessWidget {
   final ObservableGroup group;
@@ -35,30 +34,21 @@ class GroupDetailWidget extends StatefulWidget {
 }
 
 class _GroupDetailWidgetState extends State<GroupDetailWidget> {
-  List<ObservableTrack> _tracks;
-  bool _error = false;
-  bool _loading = true;
-  //int _page = 1;
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
+  GroupDetailController _controller;
 
   @override
   void initState() {
     super.initState();
-    _refresh();
+    _controller = GroupDetailController(widget.group);
   }
 
+  //int _page = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(widget.group.groupName),
+          title: Text(_controller.groupName),
           actions: [
             IconButton(
               icon: Icon(Icons.add),
@@ -71,18 +61,22 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
             ),
           ],
         ),
-        body: body());
+        body: Observer(
+          builder: (_) {
+            return body();
+          },
+        ));
   }
 
   Widget body() {
-    if (_error) {
+    if (_controller.hasError) {
       return LoadErrorWidget(
         errorMessage: 'Failed to load group.',
-        function: _refresh,
+        function: _controller.refresh,
       );
-    } else if (_loading) {
+    } else if (_controller.isLoading) {
       return LoadingWidget();
-    } else if (_tracks.isEmpty) {
+    } else if (_controller.isEmpty) {
       return Center(
         child: Text(
           'No tracks have been added to this group yet! Why not add one now?',
@@ -91,9 +85,9 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
       );
     } else {
       return ListView.builder(
-        itemCount: _tracks.length,
+        itemCount: _controller.length,
         itemBuilder: (context, index) {
-          final ObservableTrack track = _tracks[index];
+          final ObservableTrack track = _controller.tracks[index];
           return ListTile(
             leading: CachedNetworkImage(
               imageUrl: track.getAlbumThumbnail(),
@@ -112,44 +106,6 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
         },
       );
     }
-  }
-
-  void _getTracks() async {
-    try {
-      final response = await Request.get('groups/${widget.group.id}/tracks/');
-      if (response.statusCode == 200) {
-        final Iterable tracksJson = response.data['results'];
-        final List<ObservableTrack> tracks = tracksJson
-            .map((model) => ObservableTrack().factoryFromJson(model))
-            .toList();
-        populateSpotifyDetails(tracks);
-        setState(() {
-          _tracks = tracks;
-          _loading = false;
-        });
-      } else if (response.statusCode == 403) {
-        logout();
-      } else {
-        _setError();
-      }
-    } catch (e) {
-      print(e);
-      _setError();
-    }
-  }
-
-  void _refresh() {
-    setState(() {
-      _error = false;
-      _getTracks();
-    });
-  }
-
-  void _setError() {
-    setState(() {
-      this._error = true;
-      this._loading = false;
-    });
   }
 }
 
