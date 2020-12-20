@@ -13,13 +13,14 @@ class CreateGroupController = _CreateGroupControllerBase
     with _$CreateGroupController;
 
 abstract class _CreateGroupControllerBase with Store {
-  @observable
-  TextEditingController groupNameController = TextEditingController();
-  @observable
-  TextEditingController groupDescController = TextEditingController();
-  @observable
-  bool error = false;
+  final groupNameController = TextEditingController();
+  final groupDescController = TextEditingController();
 
+  @observable
+  bool _error = false;
+
+  @computed
+  bool get hasError => _error;
   @computed
   String get groupName => groupNameController.text;
   @computed
@@ -39,15 +40,15 @@ abstract class _CreateGroupControllerBase with Store {
       } else if (response.statusCode == 403) {
         logout();
       } else {
-        error = true;
+        _error = true;
       }
     } catch (e) {
-      error = true;
+      _error = true;
     }
   }
 
   @action
   refresh() {
-    error = false;
+    _error = false;
   }
 }

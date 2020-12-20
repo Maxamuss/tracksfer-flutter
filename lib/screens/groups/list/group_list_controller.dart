@@ -9,35 +9,45 @@ class GroupListController = _GroupListControllerBase with _$GroupListController;
 
 abstract class _GroupListControllerBase with Store {
   final refreshController = RefreshController(initialRefresh: false);
-  @observable
-  ObservableList<ObservableGroup> groupList =
+  ObservableList<ObservableGroup> _groupList =
       ObservableList<ObservableGroup>.of([]);
   @observable
-  bool isFirstLoading = true;
+  bool _isFirstLoading = true;
   @observable
-  bool loading = true;
+  bool _loading = true;
   @observable
-  bool error = false;
+  bool _error = false;
 
   @computed
-  bool get isEmpty => groupList.isEmpty;
+  bool get hasError => _error;
   @computed
-  int get length => groupList.length;
+  bool get isLoading => _loading;
+  @computed
+  ObservableList<ObservableGroup> get groups => _groupList;
+  @computed
+  bool get isEmpty => _groupList.isEmpty;
+  @computed
+  int get length => _groupList.length;
 
   @action
   void loadGroupList() {
-    if (isFirstLoading) {
-      getGroupList().then((value) => isFirstLoading = false);
+    if (_isFirstLoading) {
+      _getGroupList().then((value) => _isFirstLoading = false);
     }
   }
 
   @action
   addGroup(ObservableGroup group) {
-    groupList.add(group);
+    _groupList.add(group);
   }
 
   @action
-  Future<void> getGroupList() async {
+  _setGroupList(ObservableList<ObservableGroup> groups) {
+    _groupList = groups;
+  }
+
+  @action
+  Future<void> _getGroupList() async {
     try {
       final response = await Request.get('groups/');
       if (response.statusCode == 200) {
@@ -46,8 +56,8 @@ abstract class _GroupListControllerBase with Store {
             .map((model) => ObservableGroup().factoryFromJson(model))
             .toList()
             .asObservable();
-        groupList = groups;
-        loading = false;
+        _setGroupList(groups);
+        _loading = false;
         refreshController.refreshCompleted();
       } else if (response.statusCode == 403) {
         logout();
@@ -58,20 +68,20 @@ abstract class _GroupListControllerBase with Store {
       print(e.toString());
       _setError();
     }
-    loading = false;
+    _loading = false;
     return null;
   }
 
   @action
   void refresh() {
-    error = false;
-    loading = true;
-    getGroupList();
+    _error = false;
+    _loading = true;
+    _getGroupList();
   }
 
   @action
   void _setError() {
-    error = true;
-    loading = false;
+    _error = true;
+    _loading = false;
   }
 }
