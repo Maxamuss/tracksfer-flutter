@@ -54,4 +54,18 @@ class Request {
       ),
     );
   }
+
+  static Future put(String path, dynamic data, {bool auth = true}) async {
+    final headers = await _getHeaders(auth);
+    return Dio().put(
+      url + path,
+      data: data,
+      options: Options(
+        headers: headers,
+        validateStatus: (status) {
+          return true;
+        },
+      ),
+    );
+  }
 }
