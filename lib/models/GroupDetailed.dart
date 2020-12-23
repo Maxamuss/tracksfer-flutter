@@ -8,6 +8,6 @@ abstract class GroupDetailed {
   bool isPrivate;
   DateTime createdAt;
   DateTime updatedAt;
-  ObservableList<LoggedUser> users;
-  ObservableList<LoggedUser> pendingUsers;
+  ObservableList<ObservableUser> users;
+  ObservableList<ObservableUser> pendingUsers;
 }

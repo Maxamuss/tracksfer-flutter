@@ -8,8 +8,8 @@ part of 'logged_user.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$LoggedUser on _LoggedUserBase, Store {
-  final _$usernameAtom = Atom(name: '_LoggedUserBase.username');
+mixin _$ObservableUser on _ObservableUserBase, Store {
+  final _$usernameAtom = Atom(name: '_ObservableUserBase.username');
 
   @override
   String get username {
@@ -24,7 +24,7 @@ mixin _$LoggedUser on _LoggedUserBase, Store {
     });
   }
 
-  final _$profileBioAtom = Atom(name: '_LoggedUserBase.profileBio');
+  final _$profileBioAtom = Atom(name: '_ObservableUserBase.profileBio');
 
   @override
   String get profileBio {
@@ -39,7 +39,7 @@ mixin _$LoggedUser on _LoggedUserBase, Store {
     });
   }
 
-  final _$profileImageAtom = Atom(name: '_LoggedUserBase.profileImage');
+  final _$profileImageAtom = Atom(name: '_ObservableUserBase.profileImage');
 
   @override
   String get profileImage {
@@ -54,17 +54,17 @@ mixin _$LoggedUser on _LoggedUserBase, Store {
     });
   }
 
-  final _$_LoggedUserBaseActionController =
-      ActionController(name: '_LoggedUserBase');
+  final _$_ObservableUserBaseActionController =
+      ActionController(name: '_ObservableUserBase');
 
   @override
   dynamic fromJson(Map<String, dynamic> json) {
-    final _$actionInfo = _$_LoggedUserBaseActionController.startAction(
-        name: '_LoggedUserBase.fromJson');
+    final _$actionInfo = _$_ObservableUserBaseActionController.startAction(
+        name: '_ObservableUserBase.fromJson');
     try {
       return super.fromJson(json);
     } finally {
-      _$_LoggedUserBaseActionController.endAction(_$actionInfo);
+      _$_ObservableUserBaseActionController.endAction(_$actionInfo);
     }
   }
 

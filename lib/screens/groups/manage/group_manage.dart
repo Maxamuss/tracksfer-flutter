@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:tracksfer/locator/locator.dart';
 import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/screens/groups/manage/group_manage_controller.dart';
-import 'package:tracksfer/services/navigation/navigation_controller.dart';
+import 'package:tracksfer/screens/groups/manage/widgets/AnyInSliver.dart';
+import 'package:tracksfer/screens/groups/manage/widgets/GroupManagementAppBar.dart';
+import 'package:tracksfer/screens/groups/manage/widgets/GroupMemberList.dart';
+import 'package:tracksfer/screens/groups/manage/widgets/PendingUserList.dart';
+import 'package:tracksfer/widgets/conditioned.dart';
 
 class GroupManagementScreen extends StatefulWidget {
   final ObservableGroup group;
@@ -14,6 +17,7 @@ class GroupManagementScreen extends StatefulWidget {
 
 class _GroupManagementScreenState extends State<GroupManagementScreen> {
   GroupManagementController _controller;
+
   @override
   void initState() {
     super.initState();
@@ -30,140 +34,47 @@ class _GroupManagementScreenState extends State<GroupManagementScreen> {
             physics:
                 _controller.isEditing ? NeverScrollableScrollPhysics() : null,
             slivers: <Widget>[
-              Observer(builder: (_) {
-                return SliverAppBar(
-                    pinned: true,
-                    expandedHeight: _controller.isEditing ? 230.0 : 190.0,
-                    backgroundColor: Color(0xff1F1F1F),
-                    leading: Container(),
-                    leadingWidth: 0,
-                    title: Text('Manage Group'),
-                    actions: [
-                      IconButton(
-                          icon: !_controller.isEditing
-                              ? Icon(Icons.edit)
-                              : Icon(Icons.save),
-                          onPressed: !_controller.isEditing
-                              ? _controller.startEditing
-                              : _controller.saveChanges),
-                      IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: G.get<NavigationController>().pop)
-                    ],
-                    flexibleSpace: AppBarForm(_controller));
-              }),
-              SliverFixedExtentList(
-                itemExtent: 70,
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  return Card(
-                    color: Color(0xff1D1D1D),
-                    child: ListTile(
-                      title: Text(
-                        "User $index",
-                        style: TextStyle(color: Colors.white),
+              GroupManagementAppBar(_controller),
+              ConditionedWidget(
+                condition: () =>
+                    _controller.pendingUsers != null &&
+                    _controller.pendingUserListLength > 0,
+                child: AnyInSliver(
+                    child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Pending Users',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       ),
-                    ),
-                  );
-                }, childCount: 10),
-              )
+                      IconButton(
+                          icon: _controller.isCollapsed
+                              ? Icon(Icons.arrow_upward)
+                              : Icon(Icons.arrow_downward),
+                          color: Colors.white,
+                          onPressed: _controller.toggleExpandable)
+                    ],
+                  ),
+                )),
+                falseReturn: SliverList(
+                  delegate: SliverChildBuilderDelegate((_, __) => Container(),
+                      childCount: 1),
+                ),
+              ),
+              PendingUserList(_controller),
+              AnyInSliver(
+                  child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: Text(
+                  'Users',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              )),
+              GroupMemberList(_controller)
             ],
           );
         }));
-  }
-}
-
-class AppBarForm extends StatelessWidget {
-  final GroupManagementController _controller;
-  AppBarForm(this._controller);
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        margin: EdgeInsets.only(top: 50),
-        child: Form(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Observer(builder: (_) {
-                  return TextFormField(
-                    controller: _controller.nameController,
-                    enabled: _controller.isEditing,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter a name for the group.';
-                      }
-                      return null;
-                    },
-                    autofocus: true,
-                    textCapitalization: TextCapitalization.sentences,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      labelText: 'Group name',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      helperStyle: TextStyle(color: Colors.white),
-                      counter: _controller.isEditing ? null : Container(),
-                      disabledBorder: InputBorder.none,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.yellow[100]),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                      ),
-                    ),
-                    maxLength: 100,
-                  );
-                }),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Observer(builder: (_) {
-                  return TextFormField(
-                    controller: _controller.descController,
-                    enabled: _controller.isEditing,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter a description for the group.';
-                      }
-                      return null;
-                    },
-                    textCapitalization: TextCapitalization.sentences,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      labelText: 'Group description',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      helperStyle: TextStyle(color: Colors.white),
-                      counter: _controller.isEditing ? null : Container(),
-                      disabledBorder: InputBorder.none,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.yellow[100]),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                      ),
-                    ),
-                    maxLength: 150,
-                  );
-                }),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

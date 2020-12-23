@@ -102,13 +102,13 @@ mixin _$ObservableDetailedGroup on _ObservableDetailedGroupBase, Store {
   final _$usersAtom = Atom(name: '_ObservableDetailedGroupBase.users');
 
   @override
-  ObservableList<LoggedUser> get users {
+  ObservableList<ObservableUser> get users {
     _$usersAtom.reportRead();
     return super.users;
   }
 
   @override
-  set users(ObservableList<LoggedUser> value) {
+  set users(ObservableList<ObservableUser> value) {
     _$usersAtom.reportWrite(value, super.users, () {
       super.users = value;
     });
@@ -118,13 +118,13 @@ mixin _$ObservableDetailedGroup on _ObservableDetailedGroupBase, Store {
       Atom(name: '_ObservableDetailedGroupBase.pendingUsers');
 
   @override
-  ObservableList<LoggedUser> get pendingUsers {
+  ObservableList<ObservableUser> get pendingUsers {
     _$pendingUsersAtom.reportRead();
     return super.pendingUsers;
   }
 
   @override
-  set pendingUsers(ObservableList<LoggedUser> value) {
+  set pendingUsers(ObservableList<ObservableUser> value) {
     _$pendingUsersAtom.reportWrite(value, super.pendingUsers, () {
       super.pendingUsers = value;
     });

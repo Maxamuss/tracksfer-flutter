@@ -23,6 +23,34 @@ mixin _$GroupManagementController on _GroupManagementControllerBase, Store {
       (_$groupDescComputed ??= Computed<String>(() => super.groupDesc,
               name: '_GroupManagementControllerBase.groupDesc'))
           .value;
+  Computed<ObservableList<ObservableUser>> _$usersComputed;
+
+  @override
+  ObservableList<ObservableUser> get users => (_$usersComputed ??=
+          Computed<ObservableList<ObservableUser>>(() => super.users,
+              name: '_GroupManagementControllerBase.users'))
+      .value;
+  Computed<ObservableList<ObservableUser>> _$pendingUsersComputed;
+
+  @override
+  ObservableList<ObservableUser> get pendingUsers => (_$pendingUsersComputed ??=
+          Computed<ObservableList<ObservableUser>>(() => super.pendingUsers,
+              name: '_GroupManagementControllerBase.pendingUsers'))
+      .value;
+  Computed<int> _$userListLengthComputed;
+
+  @override
+  int get userListLength =>
+      (_$userListLengthComputed ??= Computed<int>(() => super.userListLength,
+              name: '_GroupManagementControllerBase.userListLength'))
+          .value;
+  Computed<int> _$pendingUserListLengthComputed;
+
+  @override
+  int get pendingUserListLength => (_$pendingUserListLengthComputed ??=
+          Computed<int>(() => super.pendingUserListLength,
+              name: '_GroupManagementControllerBase.pendingUserListLength'))
+      .value;
   Computed<String> _$newNameComputed;
 
   @override
@@ -37,6 +65,22 @@ mixin _$GroupManagementController on _GroupManagementControllerBase, Store {
       (_$newDescComputed ??= Computed<String>(() => super.newDesc,
               name: '_GroupManagementControllerBase.newDesc'))
           .value;
+
+  final _$exSliverControllerAtom =
+      Atom(name: '_GroupManagementControllerBase.exSliverController');
+
+  @override
+  ExpandableSliverListController<dynamic> get exSliverController {
+    _$exSliverControllerAtom.reportRead();
+    return super.exSliverController;
+  }
+
+  @override
+  set exSliverController(ExpandableSliverListController<dynamic> value) {
+    _$exSliverControllerAtom.reportWrite(value, super.exSliverController, () {
+      super.exSliverController = value;
+    });
+  }
 
   final _$nameControllerAtom =
       Atom(name: '_GroupManagementControllerBase.nameController');
@@ -73,13 +117,13 @@ mixin _$GroupManagementController on _GroupManagementControllerBase, Store {
   final _$_groupAtom = Atom(name: '_GroupManagementControllerBase._group');
 
   @override
-  ObservableGroup get _group {
+  ObservableDetailedGroup get _group {
     _$_groupAtom.reportRead();
     return super._group;
   }
 
   @override
-  set _group(ObservableGroup value) {
+  set _group(ObservableDetailedGroup value) {
     _$_groupAtom.reportWrite(value, super._group, () {
       super._group = value;
     });
@@ -101,6 +145,61 @@ mixin _$GroupManagementController on _GroupManagementControllerBase, Store {
     });
   }
 
+  final _$isLoadingAtom =
+      Atom(name: '_GroupManagementControllerBase.isLoading');
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
+  final _$hasErrorAtom = Atom(name: '_GroupManagementControllerBase.hasError');
+
+  @override
+  bool get hasError {
+    _$hasErrorAtom.reportRead();
+    return super.hasError;
+  }
+
+  @override
+  set hasError(bool value) {
+    _$hasErrorAtom.reportWrite(value, super.hasError, () {
+      super.hasError = value;
+    });
+  }
+
+  final _$isCollapsedAtom =
+      Atom(name: '_GroupManagementControllerBase.isCollapsed');
+
+  @override
+  bool get isCollapsed {
+    _$isCollapsedAtom.reportRead();
+    return super.isCollapsed;
+  }
+
+  @override
+  set isCollapsed(bool value) {
+    _$isCollapsedAtom.reportWrite(value, super.isCollapsed, () {
+      super.isCollapsed = value;
+    });
+  }
+
+  final _$_getUsersAsyncAction =
+      AsyncAction('_GroupManagementControllerBase._getUsers');
+
+  @override
+  Future _getUsers() {
+    return _$_getUsersAsyncAction.run(() => super._getUsers());
+  }
+
   final _$saveChangesAsyncAction =
       AsyncAction('_GroupManagementControllerBase.saveChanges');
 
@@ -111,6 +210,17 @@ mixin _$GroupManagementController on _GroupManagementControllerBase, Store {
 
   final _$_GroupManagementControllerBaseActionController =
       ActionController(name: '_GroupManagementControllerBase');
+
+  @override
+  dynamic toggleExpandable() {
+    final _$actionInfo = _$_GroupManagementControllerBaseActionController
+        .startAction(name: '_GroupManagementControllerBase.toggleExpandable');
+    try {
+      return super.toggleExpandable();
+    } finally {
+      _$_GroupManagementControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic startEditing() {
@@ -124,13 +234,54 @@ mixin _$GroupManagementController on _GroupManagementControllerBase, Store {
   }
 
   @override
+  dynamic retryGetUsers() {
+    final _$actionInfo = _$_GroupManagementControllerBaseActionController
+        .startAction(name: '_GroupManagementControllerBase.retryGetUsers');
+    try {
+      return super.retryGetUsers();
+    } finally {
+      _$_GroupManagementControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic _setEditingError() {
+    final _$actionInfo = _$_GroupManagementControllerBaseActionController
+        .startAction(name: '_GroupManagementControllerBase._setEditingError');
+    try {
+      return super._setEditingError();
+    } finally {
+      _$_GroupManagementControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic _setError() {
+    final _$actionInfo = _$_GroupManagementControllerBaseActionController
+        .startAction(name: '_GroupManagementControllerBase._setError');
+    try {
+      return super._setError();
+    } finally {
+      _$_GroupManagementControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
+exSliverController: ${exSliverController},
 nameController: ${nameController},
 descController: ${descController},
 isEditing: ${isEditing},
+isLoading: ${isLoading},
+hasError: ${hasError},
+isCollapsed: ${isCollapsed},
 groupName: ${groupName},
 groupDesc: ${groupDesc},
+users: ${users},
+pendingUsers: ${pendingUsers},
+userListLength: ${userListLength},
+pendingUserListLength: ${pendingUserListLength},
 newName: ${newName},
 newDesc: ${newDesc}
     ''';

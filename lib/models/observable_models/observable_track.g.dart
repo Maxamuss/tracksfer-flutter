@@ -57,13 +57,13 @@ mixin _$ObservableTrack on _ObservableTrackBase, Store {
   final _$userAtom = Atom(name: '_ObservableTrackBase.user');
 
   @override
-  LoggedUser get user {
+  ObservableUser get user {
     _$userAtom.reportRead();
     return super.user;
   }
 
   @override
-  set user(LoggedUser value) {
+  set user(ObservableUser value) {
     _$userAtom.reportWrite(value, super.user, () {
       super.user = value;
     });

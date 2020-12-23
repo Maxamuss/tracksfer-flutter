@@ -1,6 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:tracksfer/models/GroupDetailed.dart';
 import 'package:tracksfer/models/observable_models/logged_user.dart';
+import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/services/utils.dart';
 part 'observable_detailed_group.g.dart';
 
@@ -23,9 +24,9 @@ abstract class _ObservableDetailedGroupBase
   @observable
   DateTime updatedAt;
   @observable
-  ObservableList<LoggedUser> users = ObservableList.of([]);
+  ObservableList<ObservableUser> users = ObservableList.of([]);
   @observable
-  ObservableList<LoggedUser> pendingUsers = ObservableList.of([]);
+  ObservableList<ObservableUser> pendingUsers = ObservableList.of([]);
 
   _ObservableDetailedGroupBase(
       {this.id,
@@ -40,19 +41,37 @@ abstract class _ObservableDetailedGroupBase
   ObservableDetailedGroup factoryFromJson(Map<String, dynamic> json) {
     Iterable usersJson = json['users'];
     Iterable pendingUsersJson = json['pending_users'];
-    //List<User> users = usersJson.map((model) => User.fromJson(model)).toList();
-    //List<User> pendingUsers =
-    //    pendingUsersJson.map((model) => User.fromJson(model)).toList();
+    ObservableList<ObservableUser> users = usersJson
+        .map((model) => ObservableUser().factoryFromJson(model))
+        .toList()
+        .asObservable();
+    ObservableList<ObservableUser> pendingUsers = pendingUsersJson
+        .map((model) => ObservableUser().factoryFromJson(model))
+        .toList()
+        .asObservable();
 
     return ObservableDetailedGroup(
       id: json['id'],
       groupName: decodeString(json['group_name']),
       groupDesc: decodeString(json['group_desc']),
       isPrivate: json['is_private'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      //users: users,
-      //pendingUsers: pendingUsers,
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
+      users: users,
+      pendingUsers: pendingUsers,
+    );
+  }
+
+  ObservableDetailedGroup fromGroup(ObservableGroup group) {
+    return ObservableDetailedGroup(
+      id: group.id,
+      groupName: group.groupName,
+      groupDesc: group.groupDesc,
+      isPrivate: group.isPrivate,
+      createdAt: group.createdAt,
+      updatedAt: group.updatedAt,
+      users: null,
+      pendingUsers: null,
     );
   }
 
@@ -60,17 +79,22 @@ abstract class _ObservableDetailedGroupBase
   fromJson(Map<String, dynamic> json) {
     Iterable usersJson = json['users'];
     Iterable pendingUsersJson = json['pending_users'];
-    //List<User> users = usersJson.map((model) => User.fromJson(model)).toList();
-    //List<User> pendingUsers =
-    //    pendingUsersJson.map((model) => User.fromJson(model)).toList();
+    ObservableList<ObservableUser> users = usersJson
+        .map((model) => ObservableUser().factoryFromJson(model))
+        .toList()
+        .asObservable();
+    ObservableList<ObservableUser> pendingUsers = pendingUsersJson
+        .map((model) => ObservableUser().factoryFromJson(model))
+        .toList()
+        .asObservable();
 
-    id = json['id'];
-    groupName = decodeString(json['group_name']);
-    groupDesc = decodeString(json['group_desc']);
-    isPrivate = json['is_private'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    //users= users;
-    //pendingUsers= pendingUsers;
+    this.id = json['id'];
+    this.groupName = decodeString(json['group_name']);
+    this.groupDesc = decodeString(json['group_desc']);
+    this.isPrivate = json['is_private'];
+    this.createdAt = DateTime.parse(json['created_at']);
+    this.updatedAt = DateTime.parse(json['updated_at']);
+    this.users = users;
+    this.pendingUsers = pendingUsers;
   }
 }

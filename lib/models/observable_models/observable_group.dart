@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:tracksfer/models/Group.dart';
+import 'package:tracksfer/models/observable_models/observable_detailed_group.dart';
 import 'package:tracksfer/services/utils.dart';
 part 'observable_group.g.dart';
 
@@ -35,6 +36,17 @@ abstract class _ObservableGroupBase with Store implements Group {
       isPrivate: json['is_private'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+    );
+  }
+
+  ObservableGroup fromDetailedGroup(ObservableDetailedGroup group) {
+    return ObservableGroup(
+      id: group.id,
+      groupName: group.groupName,
+      groupDesc: group.groupDesc,
+      isPrivate: group.isPrivate,
+      createdAt: group.createdAt,
+      updatedAt: group.updatedAt,
     );
   }
 
