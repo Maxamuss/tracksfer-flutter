@@ -130,6 +130,30 @@ abstract class _GroupManagementControllerBase with Store {
   }
 
   @action
+  requestDecision(bool decision, ObservableUser user) async {
+    final username = user.username;
+    final formData = {'username': username, 'accepted': decision};
+    try {
+      print('in');
+      final response =
+          await Request.post('groups/${_group.id}/detail/', formData);
+      if (response.statusCode == 200) {
+        if (decision) {
+          users.add(user);
+        }
+        pendingUsers.remove(user);
+      } else if (response.statusCode == 403) {
+        logout();
+      } else {
+        _setError();
+      }
+    } catch (e) {
+      print(e.toString());
+      _setError();
+    }
+  }
+
+  @action
   retryGetUsers() {
     hasError = false;
     isLoading = true;

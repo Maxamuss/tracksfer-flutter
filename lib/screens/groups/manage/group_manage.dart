@@ -46,7 +46,7 @@ class _GroupManagementScreenState extends State<GroupManagementScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Pending Users',
+                        'Pending Users (${_controller.pendingUserListLength})',
                         style: TextStyle(fontSize: 20, color: Colors.white),
                       ),
                       IconButton(

@@ -20,7 +20,7 @@ class GroupMemberList extends StatelessWidget {
         } else if (_controller.isLoading) {
           return LoadingWidget();
         }
-        return UserCard(_controller.users[index]);
+        return UserCard(user: _controller.users[index]);
       }, childCount: _controller.userListLength),
     );
   }
