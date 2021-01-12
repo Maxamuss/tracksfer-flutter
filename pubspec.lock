@@ -263,6 +263,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.3"
+  get_time_ago:
+    dependency: "direct main"
+    description:
+      name: get_time_ago
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.6"
   glob:
     dependency: transitive
     description:
@@ -304,7 +311,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.8"
+    version: "0.16.1"
   io:
     dependency: transitive
     description:

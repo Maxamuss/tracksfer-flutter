@@ -14,26 +14,62 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          // scaffoldBackgroundColor: Color(0xff22272C),
-          // appBarTheme: AppBarTheme(
-          //   color: Color(0xff22272C),
-          //   elevation: 0,
-          //   centerTitle: true,
-          // ),
-          fontFamily: 'HKGrotesk',
-          // textTheme: TextTheme(
-          //   bodyText1: TextStyle(
-          //     fontSize: 20.0,
-          //     fontWeight: FontWeight.normal,
-          //     color: Color(0xffFCFBF8),
-          //   ),
-          // ),
-          // primaryColor: Color(0xffFCFBF8),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
+        theme: buildTheme(),
         navigatorKey: G.get<NavigationController>().navigationKey,
         initialRoute: SPLASH_ROUTE,
         routes: NavigationRoutes.routes);
   }
+}
+
+ThemeData buildTheme() {
+  return ThemeData(
+    fontFamily: 'DM Sans',
+    primaryColor: Color(0xff2d8fff),
+    scaffoldBackgroundColor: Color(0xff050505),
+    appBarTheme: AppBarTheme(
+      color: Color(0xff17181b),
+      elevation: 0,
+      centerTitle: true,
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+    ),
+    textTheme: TextTheme(
+      headline1: TextStyle(
+        fontSize: 45.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      headline2: TextStyle(
+        fontSize: 35.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      headline3: TextStyle(
+        fontSize: 25.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      headline6: TextStyle(
+        fontSize: 20.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      bodyText1: TextStyle(
+        fontSize: 20.0,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
+      bodyText2: TextStyle(
+        fontSize: 15.0,
+        color: Color(0xff9a9aa0),
+      ),
+      button: TextStyle(
+        fontSize: 20.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+    ),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+  );
 }

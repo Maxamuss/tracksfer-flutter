@@ -31,9 +31,8 @@ abstract class _GroupListControllerBase with Store {
 
   @action
   void loadGroupList() {
-    if (_isFirstLoading) {
-      _getGroupList().then((value) => _isFirstLoading = false);
-    }
+    _getGroupList().then((value) => _isFirstLoading = false);
+    if (_isFirstLoading) {}
   }
 
   @action

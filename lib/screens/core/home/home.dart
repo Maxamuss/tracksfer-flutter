@@ -22,12 +22,12 @@ class _HomeWidgetState extends State<HomeWidget> {
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(_controller.appBarTitle),
-            leading: _controller.getLeading(context),
-            actions: _controller.currentAction,
-          ),
+          // appBar: AppBar(
+          //   centerTitle: true,
+          //   title: Text(_controller.appBarTitle),
+          //   leading: _controller.getLeading(context),
+          //   actions: _controller.currentAction,
+          // ),
           body: _controller.currentBody,
           bottomNavigationBar: Observer(builder: (_) {
             return BottomNavigationBar(
