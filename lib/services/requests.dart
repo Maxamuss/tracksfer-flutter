@@ -6,8 +6,7 @@ import 'utils.dart';
 class Request {
   static String get url {
     if (isInDebugMode) {
-      // return 'http://3.8.237.48:8000/';
-      return 'http://10.0.2.2:8000/';
+      return 'http://18.132.196.216:8000/';
     } else {
       return '';
     }
