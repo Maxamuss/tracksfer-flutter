@@ -21,53 +21,61 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class ColorPalette {
+  static const PrimaryColor = Color(0xFF17181c);
+  static const BackgroundColor = Color(0xFF050505);
+  static const BackgroundSecondaryColor = Color(0xFF17181c);
+  static const InputColor = Color(0xFF202022);
+  static const WhiteTextColor = Color(0xFFfefffe);
+}
+
 ThemeData buildTheme() {
   return ThemeData(
     fontFamily: 'DM Sans',
-    primaryColor: Color(0xff2d8fff),
-    scaffoldBackgroundColor: Color(0xff050505),
+    primaryColor: ColorPalette.PrimaryColor,
+    scaffoldBackgroundColor: ColorPalette.BackgroundColor,
     appBarTheme: AppBarTheme(
-      color: Color(0xff17181b),
+      color: ColorPalette.BackgroundSecondaryColor,
       elevation: 0,
       centerTitle: true,
       iconTheme: IconThemeData(
-        color: Colors.white,
+        color: ColorPalette.WhiteTextColor,
       ),
     ),
     textTheme: TextTheme(
       headline1: TextStyle(
         fontSize: 45.0,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: ColorPalette.WhiteTextColor,
       ),
       headline2: TextStyle(
         fontSize: 35.0,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: ColorPalette.WhiteTextColor,
       ),
       headline3: TextStyle(
         fontSize: 25.0,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: ColorPalette.WhiteTextColor,
       ),
       headline6: TextStyle(
         fontSize: 20.0,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: ColorPalette.WhiteTextColor,
       ),
       bodyText1: TextStyle(
-        fontSize: 20.0,
-        color: Colors.white,
+        fontSize: 17.0,
+        color: ColorPalette.WhiteTextColor,
         fontWeight: FontWeight.bold,
       ),
       bodyText2: TextStyle(
         fontSize: 15.0,
-        color: Color(0xff9a9aa0),
+        color: ColorPalette.WhiteTextColor,
       ),
       button: TextStyle(
         fontSize: 20.0,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: ColorPalette.WhiteTextColor,
       ),
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,

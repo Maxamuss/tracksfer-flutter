@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 
 import 'package:tracksfer/locator/locator.dart';
+import 'package:tracksfer/main.dart';
 import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/screens/groups/group_search.dart';
 import 'package:tracksfer/screens/groups/list/group_list_controller.dart';
@@ -54,75 +56,54 @@ class _GroupListWidgetState extends State<GroupListWidget> {
             child: Text('You are not in any groups yet'),
           );
         } else {
-          // return RefreshIndicator(
-          //   onRefresh: () async => _controller.loadGroupList(),
           return CustomScrollView(
+            physics: BouncingScrollPhysics(),
             slivers: <Widget>[
-              SliverAppBar(
-                pinned: true,
-                snap: false,
-                floating: false,
-                expandedHeight: 150.0,
-                backgroundColor: Theme.of(context).appBarTheme.color,
-                title: Text(
+              CupertinoSliverNavigationBar(
+                largeTitle: Text(
                   'Playlists',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                actions: [
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () => _navigator.push(GROUP_CREATE_ROUTE),
-                  ),
-                ],
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        left: 15.0,
-                        right: 15.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 70.0),
-                          Text(
-                            'Playlists',
-                            style: Theme.of(context).textTheme.headline2,
-                          ),
-                          SizedBox(height: 10.0),
-                          SearchBarWidget(() {
-                            showSearch(
-                              context: context,
-                              delegate: GroupSearchDelegate(),
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'DM Sans',
                   ),
                 ),
+                trailing: IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () => _navigator.push(GROUP_CREATE_ROUTE),
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    ObservableGroup group = _controller.groups[index];
-                    return ListTile(
-                      title: Text(
-                        group.groupName,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      subtitle: Text(
-                        group.groupDesc,
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
-                      trailing: Text(TimeAgo.getTimeAgo(group.updatedAt)),
-                      onTap: () {
-                        _navigator.push(GROUP_DETAILS_ROUTE, arguments: group);
-                      },
-                    );
-                  },
-                  childCount: _controller.length,
+              SliverPersistentHeader(
+                delegate: PersistentHeader(),
+              ),
+              CupertinoSliverRefreshControl(
+                onRefresh: () async => _controller.loadGroupList(),
+              ),
+              SliverSafeArea(
+                top: false,
+                minimum: const EdgeInsets.only(top: 8),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      ObservableGroup group = _controller.groups[index];
+                      return ListTile(
+                        title: Text(
+                          group.groupName,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        subtitle: Text(
+                          group.groupDesc,
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        trailing: Text(TimeAgo.getTimeAgo(group.updatedAt)),
+                        onTap: () {
+                          _navigator.push(GROUP_DETAILS_ROUTE,
+                              arguments: group);
+                        },
+                      );
+                    },
+                    childCount: _controller.length,
+                  ),
                 ),
               ),
             ],
@@ -130,5 +111,34 @@ class _GroupListWidgetState extends State<GroupListWidget> {
         }
       },
     );
+  }
+}
+
+class PersistentHeader extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.0),
+      child: CupertinoTextField(
+        prefix: Icon(CupertinoIcons.search),
+        textInputAction: TextInputAction.done,
+        placeholder: 'Search Playlists',
+        clearButtonMode: OverlayVisibilityMode.editing,
+        placeholderStyle: Theme.of(context).textTheme.bodyText1,
+        decoration: BoxDecoration(color: ColorPalette.InputColor),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 30.0;
+
+  @override
+  double get minExtent => 30.0;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }
