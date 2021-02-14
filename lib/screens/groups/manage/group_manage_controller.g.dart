@@ -208,6 +208,15 @@ mixin _$GroupManagementController on _GroupManagementControllerBase, Store {
     return _$saveChangesAsyncAction.run(() => super.saveChanges());
   }
 
+  final _$requestDecisionAsyncAction =
+      AsyncAction('_GroupManagementControllerBase.requestDecision');
+
+  @override
+  Future requestDecision(bool decision, ObservableUser user) {
+    return _$requestDecisionAsyncAction
+        .run(() => super.requestDecision(decision, user));
+  }
+
   final _$_GroupManagementControllerBaseActionController =
       ActionController(name: '_GroupManagementControllerBase');
 
