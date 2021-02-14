@@ -62,18 +62,20 @@ class _GroupListWidgetState extends State<GroupListWidget> {
             itemCount: _controller.length,
             itemBuilder: (context, index) {
               ObservableGroup group = _controller.groups[index];
-              return ListTile(
-                title: Text(group.groupName),
-                subtitle: Text(group.groupDesc),
-                trailing: Text(
-                  DateFormat('H:m EEEE d LLLL')
-                      .format(group.updatedAt)
-                      .toString(),
-                ),
-                onTap: () {
-                  _navigator.push(GROUP_DETAILS_ROUTE, arguments: group);
-                },
-              );
+              return Observer(builder: (_) {
+                return ListTile(
+                  title: Text(group.groupName),
+                  subtitle: Text(group.groupDesc),
+                  trailing: Text(
+                    DateFormat('H:m EEEE d LLLL')
+                        .format(group.updatedAt)
+                        .toString(),
+                  ),
+                  onTap: () {
+                    _navigator.push(GROUP_DETAILS_ROUTE, arguments: group);
+                  },
+                );
+              });
             },
           ),
         );

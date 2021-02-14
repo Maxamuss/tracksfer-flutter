@@ -28,7 +28,7 @@ class Request {
     return headers;
   }
 
-  static Future get(String path, {bool auth = true}) async {
+  static Future<Response> get(String path, {bool auth = true}) async {
     final headers = await _getHeaders(auth);
     return Dio().get(
       url + path,
@@ -41,9 +41,25 @@ class Request {
     );
   }
 
-  static Future post(String path, dynamic data, {bool auth = true}) async {
+  static Future<Response> post(String path, dynamic data,
+      {bool auth = true}) async {
     final headers = await _getHeaders(auth);
     return Dio().post(
+      url + path,
+      data: data,
+      options: Options(
+        headers: headers,
+        validateStatus: (status) {
+          return true;
+        },
+      ),
+    );
+  }
+
+  static Future<Response> put(String path, dynamic data,
+      {bool auth = true}) async {
+    final headers = await _getHeaders(auth);
+    return Dio().put(
       url + path,
       data: data,
       options: Options(

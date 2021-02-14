@@ -6,7 +6,7 @@ abstract class Track {
   String id;
   ObservableGroup group;
   String spotifyId;
-  LoggedUser user;
+  ObservableUser user;
   DateTime createdAt;
   Spotify.Track spotifyTrack; // Stores Spotify info about track.
 

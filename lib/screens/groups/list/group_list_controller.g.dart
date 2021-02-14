@@ -123,6 +123,17 @@ mixin _$GroupListController on _GroupListControllerBase, Store {
   }
 
   @override
+  dynamic replaceGroup(ObservableGroup group) {
+    final _$actionInfo = _$_GroupListControllerBaseActionController.startAction(
+        name: '_GroupListControllerBase.replaceGroup');
+    try {
+      return super.replaceGroup(group);
+    } finally {
+      _$_GroupListControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic _setGroupList(ObservableList<ObservableGroup> groups) {
     final _$actionInfo = _$_GroupListControllerBaseActionController.startAction(
         name: '_GroupListControllerBase._setGroupList');

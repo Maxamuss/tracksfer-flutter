@@ -12,7 +12,7 @@ abstract class _ObservableCommentBase with Store implements Comment {
   @observable
   String trackId;
   @observable
-  LoggedUser user;
+  ObservableUser user;
   @observable
   DateTime createdAt;
   @observable
@@ -30,7 +30,7 @@ abstract class _ObservableCommentBase with Store implements Comment {
     return ObservableComment(
       id: json['id'],
       trackId: json['track_id'],
-      user: LoggedUser().fromJson(json['user']),
+      user: ObservableUser().fromJson(json['user']),
       createdAt: DateTime.parse(json['created_at']),
       body: decodeString(json['body']),
     );
@@ -40,7 +40,7 @@ abstract class _ObservableCommentBase with Store implements Comment {
   fromJson(Map<String, dynamic> json) {
     id = json['id'];
     trackId = json['track_id'];
-    user = LoggedUser().factoryFromJson(json['user']);
+    user = ObservableUser().factoryFromJson(json['user']);
     createdAt = DateTime.parse(json['created_at']);
     body = decodeString(json['body']);
   }

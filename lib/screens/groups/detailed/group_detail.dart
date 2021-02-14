@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:tracksfer/locator/locator.dart';
 import 'package:tracksfer/models/observable_models/observable_group.dart';
 import 'package:tracksfer/models/observable_models/observable_track.dart';
 import 'package:tracksfer/screens/groups/detailed/group_detail_controller.dart';
 import 'package:tracksfer/screens/spotify/spotify_search.dart';
+import 'package:tracksfer/services/navigation/navigation_controller.dart';
+import 'package:tracksfer/services/navigation/navigation_routes.dart';
 
 import '../../../widgets/error.dart';
 import '../../../widgets/loading.dart';
@@ -57,6 +60,14 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
                   context: context,
                   delegate: SpotifySearchDelegate(),
                 );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                G
+                    .get<NavigationController>()
+                    .push(GROUP_MANAGE_ROUTE, arguments: widget.group);
               },
             ),
           ],
