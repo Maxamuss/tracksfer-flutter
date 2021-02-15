@@ -42,13 +42,13 @@ mixin _$ObservableComment on _ObservableCommentBase, Store {
   final _$userAtom = Atom(name: '_ObservableCommentBase.user');
 
   @override
-  LoggedUser get user {
+  ObservableUser get user {
     _$userAtom.reportRead();
     return super.user;
   }
 
   @override
-  set user(LoggedUser value) {
+  set user(ObservableUser value) {
     _$userAtom.reportWrite(value, super.user, () {
       super.user = value;
     });

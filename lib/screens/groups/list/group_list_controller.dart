@@ -42,6 +42,15 @@ abstract class _GroupListControllerBase with Store {
   }
 
   @action
+  replaceGroup(ObservableGroup group) {
+    int groupIndex =
+        _groupList.lastIndexWhere((element) => element.id == group.id);
+    if (groupIndex != -1) {
+      _groupList[groupIndex] = group;
+    }
+  }
+
+  @action
   _setGroupList(ObservableList<ObservableGroup> groups) {
     _groupList = groups;
   }

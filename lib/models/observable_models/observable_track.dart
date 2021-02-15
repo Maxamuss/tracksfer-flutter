@@ -15,7 +15,7 @@ abstract class _ObservableTrackBase with Store implements Track {
   @observable
   String spotifyId;
   @observable
-  LoggedUser user;
+  ObservableUser user;
   @observable
   DateTime createdAt;
   @observable
