@@ -8,7 +8,7 @@ class FeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = G.get<FeedController>();
-    //wrap with Observer each widget that needs to update when a computed or observable updates
+    //wrap with Observer each widget that needs to update when a value annotated with computed or observable changes in the controller, like when you do a refresh
     return Scaffold(
       body: Container(
         child: Center(
