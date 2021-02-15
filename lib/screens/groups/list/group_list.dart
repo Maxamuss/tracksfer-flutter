@@ -67,14 +67,18 @@ class _GroupListWidgetState extends State<GroupListWidget> {
                     fontFamily: 'DM Sans',
                   ),
                 ),
+                leading: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () => showSearch(
+                    context: context,
+                    delegate: GroupSearchDelegate(),
+                  ),
+                ),
                 trailing: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () => _navigator.push(GROUP_CREATE_ROUTE),
                 ),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              ),
-              SliverPersistentHeader(
-                delegate: PersistentHeader(),
               ),
               CupertinoSliverRefreshControl(
                 onRefresh: () async => _controller.loadGroupList(),
@@ -97,12 +101,14 @@ class _GroupListWidgetState extends State<GroupListWidget> {
                         ),
                         trailing: Text(TimeAgo.getTimeAgo(group.updatedAt)),
                         onTap: () {
-                          _navigator.push(GROUP_DETAILS_ROUTE,
-                              arguments: group);
+                          _navigator.push(
+                            GROUP_DETAILS_ROUTE,
+                            arguments: group,
+                          );
                         },
                       );
                     },
-                    childCount: _controller.length,
+                    childCount: _controller.groups.length,
                   ),
                 ),
               ),

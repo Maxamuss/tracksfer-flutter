@@ -33,6 +33,7 @@ abstract class _GroupListControllerBase with Store {
   void loadGroupList() {
     _getGroupList().then((value) => _isFirstLoading = false);
     if (_isFirstLoading) {}
+    return;
   }
 
   @action
