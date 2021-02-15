@@ -9,78 +9,33 @@ part of 'feed_activity.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FeedActivity on _FeedActivityBase, Store {
-  final _$idAtom = Atom(name: '_FeedActivityBase.id');
+  final _$actionTypeAtom = Atom(name: '_FeedActivityBase.actionType');
 
   @override
-  String get id {
-    _$idAtom.reportRead();
-    return super.id;
+  int get actionType {
+    _$actionTypeAtom.reportRead();
+    return super.actionType;
   }
 
   @override
-  set id(String value) {
-    _$idAtom.reportWrite(value, super.id, () {
-      super.id = value;
+  set actionType(int value) {
+    _$actionTypeAtom.reportWrite(value, super.actionType, () {
+      super.actionType = value;
     });
   }
 
-  final _$foreignIdAtom = Atom(name: '_FeedActivityBase.foreignId');
+  final _$userAtom = Atom(name: '_FeedActivityBase.user');
 
   @override
-  String get foreignId {
-    _$foreignIdAtom.reportRead();
-    return super.foreignId;
+  ObservableUser get user {
+    _$userAtom.reportRead();
+    return super.user;
   }
 
   @override
-  set foreignId(String value) {
-    _$foreignIdAtom.reportWrite(value, super.foreignId, () {
-      super.foreignId = value;
-    });
-  }
-
-  final _$timeAtom = Atom(name: '_FeedActivityBase.time');
-
-  @override
-  DateTime get time {
-    _$timeAtom.reportRead();
-    return super.time;
-  }
-
-  @override
-  set time(DateTime value) {
-    _$timeAtom.reportWrite(value, super.time, () {
-      super.time = value;
-    });
-  }
-
-  final _$verbAtom = Atom(name: '_FeedActivityBase.verb');
-
-  @override
-  String get verb {
-    _$verbAtom.reportRead();
-    return super.verb;
-  }
-
-  @override
-  set verb(String value) {
-    _$verbAtom.reportWrite(value, super.verb, () {
-      super.verb = value;
-    });
-  }
-
-  final _$actorAtom = Atom(name: '_FeedActivityBase.actor');
-
-  @override
-  ObservableUser get actor {
-    _$actorAtom.reportRead();
-    return super.actor;
-  }
-
-  @override
-  set actor(ObservableUser value) {
-    _$actorAtom.reportWrite(value, super.actor, () {
-      super.actor = value;
+  set user(ObservableUser value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
     });
   }
 
@@ -146,11 +101,8 @@ mixin _$FeedActivity on _FeedActivityBase, Store {
   @override
   String toString() {
     return '''
-id: ${id},
-foreignId: ${foreignId},
-time: ${time},
-verb: ${verb},
-actor: ${actor},
+actionType: ${actionType},
+user: ${user},
 group: ${group},
 track: ${track},
 comment: ${comment}

@@ -1,5 +1,6 @@
 abstract class Profile {
-  String username;
+  String id;
+  String displayName;
   String profileBio;
   String profileImage;
   String anthem1;

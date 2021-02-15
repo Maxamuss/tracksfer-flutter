@@ -7,20 +7,6 @@ class FeedItem = _FeedItemBase with _$FeedItem;
 
 abstract class _FeedItemBase with Store {
   @observable
-  String id;
-  @observable
-  int activityCount;
-  @observable
-  int actorCount;
-  @observable
-  String verb;
-  @observable
-  ObservableGroup group;
-  @observable
-  DateTime createdAt;
-  @observable
-  DateTime updatedAt;
-  @observable
   ObservableList<FeedActivity> activities = ObservableList.of([]);
 
   @computed
@@ -28,25 +14,12 @@ abstract class _FeedItemBase with Store {
   @computed
   int get activityLength => activities.length;
 
-  _FeedItemBase(
-      {this.id,
-      this.activityCount,
-      this.verb,
-      this.group,
-      this.actorCount,
-      this.activities,
-      this.createdAt,
-      this.updatedAt});
+  _FeedItemBase({this.activities});
 
-  FeedItem factoryFromJson(Map<String, dynamic> json) {
-    List<Map<String, dynamic>> activityJson = json['activities'];
+  FeedItem factoryFromJson(List<dynamic> json) {
+    print(json);
     return FeedItem(
-      id: json['id'],
-      verb: json['verb'],
-      group: ObservableGroup().factoryFromJson(json['group']),
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      activities: activityJson
+      activities: json
           .map((model) => FeedActivity().factoryFromJson(model))
           .toList()
           .asObservable(),
@@ -54,15 +27,8 @@ abstract class _FeedItemBase with Store {
   }
 
   @action
-  fromJson(Map<String, dynamic> json) {
-    List<Map<String, dynamic>> activityJson = json['activities'];
-
-    id = json['id'];
-    verb = json['verb'];
-    group = ObservableGroup().factoryFromJson(json['group']);
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    activities = activityJson
+  fromJson(List<Map<String, dynamic>> json) {
+    activities = json
         .map((model) => FeedActivity().factoryFromJson(model))
         .toList()
         .asObservable();

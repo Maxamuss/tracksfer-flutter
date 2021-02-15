@@ -18,7 +18,7 @@ class UserCard extends StatelessWidget {
               color: Color(0xff1D1D1D),
               child: ListTile(
                 title: Text(
-                  user.username,
+                  user.displayName,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -31,7 +31,7 @@ class UserCard extends StatelessWidget {
                 color: Color(0xff1D1D1D),
                 child: ListTile(
                   title: Text(
-                    user.username,
+                    user.displayName,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

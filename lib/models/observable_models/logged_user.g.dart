@@ -9,18 +9,33 @@ part of 'logged_user.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ObservableUser on _ObservableUserBase, Store {
-  final _$usernameAtom = Atom(name: '_ObservableUserBase.username');
+  final _$idAtom = Atom(name: '_ObservableUserBase.id');
 
   @override
-  String get username {
-    _$usernameAtom.reportRead();
-    return super.username;
+  String get id {
+    _$idAtom.reportRead();
+    return super.id;
   }
 
   @override
-  set username(String value) {
-    _$usernameAtom.reportWrite(value, super.username, () {
-      super.username = value;
+  set id(String value) {
+    _$idAtom.reportWrite(value, super.id, () {
+      super.id = value;
+    });
+  }
+
+  final _$displayNameAtom = Atom(name: '_ObservableUserBase.displayName');
+
+  @override
+  String get displayName {
+    _$displayNameAtom.reportRead();
+    return super.displayName;
+  }
+
+  @override
+  set displayName(String value) {
+    _$displayNameAtom.reportWrite(value, super.displayName, () {
+      super.displayName = value;
     });
   }
 
@@ -71,7 +86,8 @@ mixin _$ObservableUser on _ObservableUserBase, Store {
   @override
   String toString() {
     return '''
-username: ${username},
+id: ${id},
+displayName: ${displayName},
 profileBio: ${profileBio},
 profileImage: ${profileImage}
     ''';

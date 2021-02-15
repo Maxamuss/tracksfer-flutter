@@ -1,7 +1,10 @@
 import 'package:mobx/mobx.dart';
+import 'package:tracksfer/models/observable_models/feed_activity.dart';
 import 'package:tracksfer/models/observable_models/feed_item.dart';
+import 'package:tracksfer/models/observable_models/observable_track.dart';
 import 'package:tracksfer/services/auth.dart';
 import 'package:tracksfer/services/requests.dart';
+import 'package:tracksfer/services/spotify.dart';
 part 'feed_controller.g.dart';
 
 class FeedController = _FeedControllerBase with _$FeedController;
@@ -26,15 +29,29 @@ abstract class _FeedControllerBase with Store {
   int get length => _feedItems.length;
 
   @action
+  void loadFeed() {
+    _getItems();
+  }
+
+  @action
   Future<void> _getItems() async {
     try {
       final response = await Request.get('feed/');
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        List feedJson = response.data['results'];
+        final feedJson = response.data['results'];
         _feedItems = feedJson
             .map((model) => FeedItem().factoryFromJson(model))
             .toList()
             .asObservable();
+        // print(_feedItems);
+        // final List<ObservableTrack> tracks = [];
+        // _feedItems.forEach((item) {
+        //   item.activities.forEach((activity) {
+        //     tracks.add(activity.track);
+        //   });
+        // });
+        // await populateSpotifyDetails(tracks);
         _loading = false;
       } else if (response.statusCode == 403) {
         logout();

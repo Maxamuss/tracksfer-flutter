@@ -38,7 +38,7 @@ class PendingUserList extends StatelessWidget {
                 ObservableUser user = _controller.pendingUsers[index];
                 CustomBottomSheets.showConfirmation(
                     context,
-                    'Do you want to accept ${user.username} into the group?',
+                    'Do you want to accept ${user.displayName} into the group?',
                     'Accept',
                     () => _controller.requestDecision(true, user),
                     hasOppositeAction: true,

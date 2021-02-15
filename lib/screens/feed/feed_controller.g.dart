@@ -99,6 +99,17 @@ mixin _$FeedController on _FeedControllerBase, Store {
       ActionController(name: '_FeedControllerBase');
 
   @override
+  void loadFeed() {
+    final _$actionInfo = _$_FeedControllerBaseActionController.startAction(
+        name: '_FeedControllerBase.loadFeed');
+    try {
+      return super.loadFeed();
+    } finally {
+      _$_FeedControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void refresh() {
     final _$actionInfo = _$_FeedControllerBaseActionController.startAction(
         name: '_FeedControllerBase.refresh');

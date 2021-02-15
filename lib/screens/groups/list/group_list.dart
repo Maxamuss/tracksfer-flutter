@@ -108,7 +108,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
                         },
                       );
                     },
-                    childCount: _controller.groups.length,
+                    childCount: _controller.length,
                   ),
                 ),
               ),

@@ -9,15 +9,9 @@ class FeedActivity = _FeedActivityBase with _$FeedActivity;
 
 abstract class _FeedActivityBase with Store {
   @observable
-  String id;
+  int actionType;
   @observable
-  String foreignId;
-  @observable
-  DateTime time;
-  @observable
-  String verb;
-  @observable
-  ObservableUser actor;
+  ObservableUser user;
   @observable
   ObservableGroup group;
   @observable
@@ -25,38 +19,32 @@ abstract class _FeedActivityBase with Store {
   @observable
   ObservableComment comment;
 
-  _FeedActivityBase(
-      {this.actor,
-      this.comment,
-      this.time,
-      this.foreignId,
-      this.group,
-      this.id,
-      this.track,
-      this.verb});
+  _FeedActivityBase({
+    this.actionType,
+    this.user,
+    this.comment,
+    this.group,
+    this.track,
+  });
 
   FeedActivity factoryFromJson(Map<String, dynamic> json) {
+    print(json);
+    print('xyz');
     return FeedActivity(
-      id: json['id'],
-      foreignId: json['foreign_id'],
-      verb: json['verb'],
-      time: DateTime.parse(json['time']),
-      actor: ObservableUser().factoryFromJson(json['actor']),
-      group: ObservableGroup().factoryFromJson(json['origin']),
-      track: ObservableTrack().factoryFromJson(json['object']),
-      comment: ObservableComment().factoryFromJson(json['object']),
+      actionType: json['action_type'],
+      user: ObservableUser().factoryFromJson(json['user']),
+      group: ObservableGroup().factoryFromJson(json['group']),
+      track: ObservableTrack().factoryFromJson(json['track']),
+      comment: ObservableComment().factoryFromJson(json['comment']),
     );
   }
 
   @action
   fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    foreignId = json['foreign_id'];
-    verb = json['verb'];
-    time = DateTime.parse(json['time']);
-    actor = ObservableUser().factoryFromJson(json['actor']);
-    group = ObservableGroup().factoryFromJson(json['origin']);
-    track = ObservableTrack().factoryFromJson(json['object']);
-    comment = ObservableComment().factoryFromJson(json['object']);
+    actionType = json['action_type'];
+    user = ObservableUser().factoryFromJson(json['user']);
+    group = ObservableGroup().factoryFromJson(json['group']);
+    track = ObservableTrack().factoryFromJson(json['track']);
+    comment = ObservableComment().factoryFromJson(json['comment']);
   }
 }

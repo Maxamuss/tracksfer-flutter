@@ -131,7 +131,7 @@ abstract class _GroupManagementControllerBase with Store {
 
   @action
   requestDecision(bool decision, ObservableUser user) async {
-    final username = user.username;
+    final username = user.displayName;
     final formData = {'username': username, 'accepted': decision};
     try {
       print('in');
