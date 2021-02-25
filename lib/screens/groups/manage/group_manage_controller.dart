@@ -77,7 +77,6 @@ abstract class _GroupManagementControllerBase with Store {
     try {
       final response = await Request.get('groups/${_group.id}/detail/');
       if (response.statusCode == 200) {
-        print("??????????");
         _group = ObservableDetailedGroup().factoryFromJson(response.data);
         isLoading = false;
       } else if (response.statusCode == 403) {
@@ -134,7 +133,6 @@ abstract class _GroupManagementControllerBase with Store {
     final username = user.username;
     final formData = {'username': username, 'accepted': decision};
     try {
-      print('in');
       final response =
           await Request.post('groups/${_group.id}/detail/', formData);
       if (response.statusCode == 200) {

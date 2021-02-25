@@ -6,7 +6,7 @@ import 'utils.dart';
 class Request {
   static String get url {
     if (isInDebugMode) {
-      return 'http://18.132.196.216:8000/';
+      return 'http://18.133.246.231:8000/';
     } else {
       return '';
     }
@@ -60,6 +60,21 @@ class Request {
       {bool auth = true}) async {
     final headers = await _getHeaders(auth);
     return Dio().put(
+      url + path,
+      data: data,
+      options: Options(
+        headers: headers,
+        validateStatus: (status) {
+          return true;
+        },
+      ),
+    );
+  }
+
+  static Future<Response> patch(String path, dynamic data,
+      {bool auth = true}) async {
+    final headers = await _getHeaders(auth);
+    return Dio().patch(
       url + path,
       data: data,
       options: Options(

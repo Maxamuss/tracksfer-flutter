@@ -9,6 +9,13 @@ part of 'display_name_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SetDisplayNameController on _SetDisplayNameControllerBase, Store {
+  Computed<String> _$usernameComputed;
+
+  @override
+  String get username =>
+      (_$usernameComputed ??= Computed<String>(() => super.username,
+              name: '_SetDisplayNameControllerBase.username'))
+          .value;
   Computed<int> _$lengthComputed;
 
   @override
@@ -16,26 +23,27 @@ mixin _$SetDisplayNameController on _SetDisplayNameControllerBase, Store {
           name: '_SetDisplayNameControllerBase.length'))
       .value;
 
-  final _$displayNameAtom =
-      Atom(name: '_SetDisplayNameControllerBase.displayName');
+  final _$textControllerAtom =
+      Atom(name: '_SetDisplayNameControllerBase.textController');
 
   @override
-  String get displayName {
-    _$displayNameAtom.reportRead();
-    return super.displayName;
+  TextEditingController get textController {
+    _$textControllerAtom.reportRead();
+    return super.textController;
   }
 
   @override
-  set displayName(String value) {
-    _$displayNameAtom.reportWrite(value, super.displayName, () {
-      super.displayName = value;
+  set textController(TextEditingController value) {
+    _$textControllerAtom.reportWrite(value, super.textController, () {
+      super.textController = value;
     });
   }
 
   @override
   String toString() {
     return '''
-displayName: ${displayName},
+textController: ${textController},
+username: ${username},
 length: ${length}
     ''';
   }

@@ -27,6 +27,9 @@ class SetDisplayNameWidget extends StatefulWidget {
 class _SetDisplayNameWidgetState extends State<SetDisplayNameWidget> {
   SetDisplayNameController _controller;
 
+  final RegExp regExp = RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%\s-]');
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     _controller = SetDisplayNameController(widget.displayName);
@@ -37,40 +40,56 @@ class _SetDisplayNameWidgetState extends State<SetDisplayNameWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      child: Column(
-        children: [
-          Observer(builder: (_) {
-            return TextFormField(
-              onChanged: (value) => _controller.displayName = value,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please enter a username.';
-                }
-                return null;
-              },
-              autofocus: true,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                labelText: 'Username',
-                labelStyle: TextStyle(color: Colors.grey),
-                helperStyle: TextStyle(color: Colors.white),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      color: Color(0xff1F1F1F),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Observer(builder: (_) {
+              return TextFormField(
+                controller: _controller.textController,
+                validator: (value) => value.isEmpty
+                    ? 'Enter a username'
+                    : (regExp.hasMatch(value)
+                        ? 'Enter a valid username'
+                        : null),
+                autofocus: true,
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                  labelStyle: TextStyle(color: Colors.grey),
+                  helperStyle: TextStyle(color: Colors.white),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.yellow[100]),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.yellow[100]),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  ),
-                ),
-              ),
-            );
-          }),
-          FlatButton(onPressed: null, child: Text('Save'))
-        ],
+              );
+            }),
+            ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.white),
+                    foregroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.black)),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    _controller.updateUsername();
+                  }
+                },
+                child: Text('Save'))
+          ],
+        ),
       ),
     );
   }

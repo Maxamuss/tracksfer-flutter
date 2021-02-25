@@ -10,27 +10,27 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-      child: Center(
-        child: RaisedButton(
-          onPressed: () async {
-            final loginInfo = await _controller.loginUser();
-            if (loginInfo != null) {
-              if (loginInfo['newUser']) {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            SetDisplayNameScreen(loginInfo['displayName'])),
-                    (Route<dynamic> route) => false);
-              } else {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/home', (Route<dynamic> route) => false);
+        child: Center(
+          child: RaisedButton(
+            onPressed: () async {
+              final loginInfo = await _controller.loginUser();
+              if (loginInfo != null) {
+                if (loginInfo['newUser']) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SetDisplayNameScreen(loginInfo['displayName'])),
+                      (Route<dynamic> route) => false);
+                } else {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/home', (Route<dynamic> route) => false);
+                }
               }
-            }
-          },
-          child: Text('Login with Spotify'),
+            },
+            child: Text('Login with Spotify'),
+          ),
         ),
       ),
-    ),
     );
   }
 }
